@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/jeu.css') }}">
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+<img id="jumpscareImage" src="../static/jumpscare.jpg" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="{{ url_for('static', filename='../static/jeu.js') }}"></script>
+</body>
+</html>

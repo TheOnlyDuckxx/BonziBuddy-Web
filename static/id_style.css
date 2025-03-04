@@ -1,0 +1,103 @@
+body {
+    font-family: "OCR-B", "Arial", sans-serif;
+    font-size: 20px;
+    font-size: 20px; /* Taille du texte */
+    font-weight: bold; /* Texte en gras */
+    letter-spacing: 2px; /* Espacement entre les lettres */
+    text-transform: uppercase; /* Texte en majuscules */
+    color: #585858;
+    height: 100vh; 
+    width: 100%;
+}
+
+.background {
+    width: 400px;
+    background-image: url('../static/carte_identite.jpg');
+    background-size: 100% 100%; /* Redimensionne l'image pour remplir la div */
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.prenom {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 56vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 60vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.prenom2 {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 119vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 72vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.nom {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 44vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 57vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.naissance {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 68vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 78vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.sexe {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 68vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 57vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.taille {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 78vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 56vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.n° {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 36vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 61vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.id {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 108vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 33vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.num_pr {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 119vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 33vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.n°_bas {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 109vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 87vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.n°_bas2 {
+    position: absolute; /* Position absolue par rapport à l'écran */
+    top: 119vh; /* 30% de la hauteur de l'écran depuis le haut */
+    left: 81vw; /* 20% de la largeur de l'écran depuis la gauche */
+    padding: 10px 20px; /* Espace interne */
+}
+
+.screenshot {
+    position: absolute;
+    top: 46vh;
+    left: 30vw;
+    width: 263px;
+}

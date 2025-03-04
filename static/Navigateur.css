@@ -1,0 +1,52 @@
+body {
+    display: flex;
+    flex-direction: column; /* Permet d'empiler les éléments en colonne */
+    justify-content: center; /* Centre verticalement */
+    align-items: center; /* Centre horizontalement */
+    height: 100vh;
+    margin: 0;
+    background-image: url('wallpaper.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#Box {
+    border: 2px solid #1C6EA4;
+    border-radius: 40px;
+    width: 600px;
+    height: 50px;
+    font-size: 20px;
+
+    
+}
+
+#Box::placeholder {
+    color: gray; /* Texte du placeholder en gris */
+    opacity: 1; /* Assure que la couleur est bien appliquée */
+}
+
+.search-container {
+    display: flex;
+    align-items: center; /* Aligne verticalement */
+}
+
+#loupe {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    margin-left: 10px; /* Décale l’image à droite */
+    
+}
+
+#txt-accueil {
+    text-align: center;
+    font-size: 45px;
+    margin-bottom: 40px;
+
+}
+
+#h2 {
+    font-size: 5px;
+}
+

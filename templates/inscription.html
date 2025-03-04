@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrition-BonziBuddy</title>
+  <link rel="stylesheet" href="../static/formulaire_style.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const video = document.getElementById('webcam');
+      const canvas = document.getElementById('canvas');
+      const screenshot = document.getElementById('screenshot');
+      const captureBtn = document.getElementById('capture-btn');
+      const screenshotData = document.getElementById('screenshot-data');
+  
+      // Taille du format 3:4
+      const canvasWidth = 300;  // Largeur
+      const canvasHeight = 400; // Hauteur
+  
+      // Demande d'accès à la webcam
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            video.srcObject = stream;
+          })
+          .catch(err => {
+            alert("Impossible d'accéder à la webcam intégrée. Vérifiez les permissions.");
+            console.error("Erreur webcam : ", err);
+          });
+      } else {
+        alert("Webcam non supportée par votre navigateur.");
+      }
+  
+      captureBtn.addEventListener('click', function (event) {
+        event.preventDefault(); // Empêche un comportement par défaut du bouton
+  
+        const context = canvas.getContext('2d');
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+  
+        // Détermination du recadrage en 3:4
+        const videoRatio = video.videoWidth / video.videoHeight;
+        const targetRatio = canvasWidth / canvasHeight;
+  
+        let sx, sy, sWidth, sHeight;
+        if (videoRatio > targetRatio) {
+          sHeight = video.videoHeight;
+          sWidth = sHeight * targetRatio;
+          sx = (video.videoWidth - sWidth) / 2;
+          sy = 0;
+        } else {
+          sWidth = video.videoWidth;
+          sHeight = sWidth / targetRatio;
+          sx = 0;
+          sy = (video.videoHeight - sHeight) / 2;
+        }
+  
+        // Capture de l'image et dessin sur le canvas
+        context.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvasWidth, canvasHeight);
+  
+        // Appliquer le filtre noir et blanc
+        let imageData = context.getImageData(0, 0, canvasWidth, canvasHeight);
+        let pixels = imageData.data;
+  
+        for (let i = 0; i < pixels.length; i += 4) {
+          let r = pixels[i];     // Rouge
+          let g = pixels[i + 1]; // Vert
+          let b = pixels[i + 2]; // Bleu
+  
+          // Moyenne des trois canaux pour un effet noir et blanc
+          let gray = (r + g + b) / 3;
+  
+          pixels[i] = pixels[i + 1] = pixels[i + 2] = gray; // Appliquer la valeur de gris
+        }
+  
+        context.putImageData(imageData, 0, 0); // Redessine l’image modifiée
+  
+        // Conversion en base64
+        const imageDataURL = canvas.toDataURL('image/png');
+        screenshot.src = imageDataURL; // Affichage de l’image capturée en noir et blanc
+        screenshot.style.display = "block";
+        screenshotData.value = imageDataURL; // Stockage de l’image dans le champ caché
+      });
+    });
+  </script>
+
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="../static/BonziBuddy.png" alt="Icône inscrutable" class="icone">
+      <h2 class="sous-title">Formulaire d'inscription</h2>
+    </header>
+      <p class="main-text">
+        Accède dès maintenant à "BonziBuddy" en remplissant ce formulaire, et tu pourras utiliser sa nouvelle version en ligne !
+      </p>
+    <form id="form" action="{{ url_for('bonziworld') }}" method="post">
+      <label for="nom">Nom</label>
+      <input type="text" name="nom" id="nom" required />
+      <br>
+  
+      <label for="prenom">Prénom</label>
+      <input type="text" name="prenom" id="prenom" required />
+      <br>
+  
+      <label for="age">Âge</label>
+      <input type="number" name="age" id="age" min="0" required />
+      <br>
+  
+      <label for="question">Votre sexe ?</label>
+      <select id="question" name="sexe" required>
+          <option value="" disabled selected>Choisissez une option</option>
+          <option value="Homme">Homme</option>
+          <option value="Femme">Femme</option>
+          <option value="Transgenre">Transgenre</option>
+          <option value="Non-Binaire">Non-Binaire</option>
+          <option value="Singe">Singe</option>
+      </select>
+      <br>
+      <h3 class="mini-title">Offrez votre plus beau sourire !</h3>
+      <video id="webcam" autoplay playsinline></video>
+      <br>
+      <button class="bonzi-button" id="capture-btn">Capture Photo</button>
+      <canvas id="canvas" style="display:none;"></canvas>
+      <img class="identiter" id="screenshot" alt="Capturer la Photo">
+      <input type="hidden" name="screenshot-data" id="screenshot-data">
+      <button class="bonzi-button" type="submit">Débloquer BonziBuddy</button>
+    </form>
+    <br>
+    <footer class="footer">
+      <img src="../static/Bonzi_footer.png" style="display: block; margin: auto;">
+    </footer>
+  </div>
+</body>
+</html>
+
+

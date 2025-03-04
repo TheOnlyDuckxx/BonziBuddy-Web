@@ -1,0 +1,61 @@
+body {
+    font-family: 'MS Sans Serif', sans-serif;
+    background-color: #008080;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#win95-alert {
+    width: 300px;
+    border: 2px solid black;
+    background-color: silver;
+    box-shadow: 4px 4px black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.alert-header {
+    background-color: navy;
+    color: white;
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.alert-title {
+    font-size: 14px;
+}
+
+.close-btn {
+    background: silver;
+    border: 1px solid black;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.alert-body {
+    padding: 15px;
+    text-align: center;
+}
+
+.ok-btn {
+    background: silver;
+    border: 1px solid black;
+    padding: 5px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 2px 2px black;
+}
+
+.ok-btn:active {
+    box-shadow: none;
+    transform: translate(2px, 2px);
+}

@@ -1,0 +1,190 @@
+body {
+    font-family: "Comic Sans MS", "Verdana", sans-serif;
+    background-color: #00ffcc;
+    color: #000080;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.container {
+    padding: 20px;
+    border: 5px solid #ff00ff;
+    background: white;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+    position: relative;
+    height: 100px;
+    background: linear-gradient(to bottom, #ffccff, #cc99ff);
+    border-bottom: 3px solid #800080;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.footer {
+    position: relative;
+    height: 100px;
+    background: linear-gradient(to top, #ffccff, #cc99ff);
+    border-top: 3px solid #800080;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.icone {
+    width: 80px;
+    height: 80px;
+    border: 3px solid #800000;
+    border-radius: 50%;
+    background-color: #ffff00;
+}
+
+.bonzi-button {
+    background-color: #ff0000;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    cursor: pointer;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+.bonzi-button:hover {
+    background-color: #800000;
+    color: #00ff00;
+}
+
+/* Titre principal */
+.main-title {
+    font-size: 3rem;
+    color: #ff00ff;
+    margin-top: 20px;
+    text-shadow: 2px 2px 5px #000000;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 2px dashed #0000ff;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.title {
+    font-size: 2rem;
+    color: #ff00ff;
+    margin-top: 10px;
+    text-shadow: 2px 2px 5px #000000;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-top: 2px dashed #0000ff;
+    border-bottom: 2px dashed #0000ff;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.sous-title {
+    font-size: 2rem;
+    color: #ff00ff;
+    margin-top: 5px;
+    text-shadow: 2px 2px 5px #000000;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.mini-title {
+    font-size: 1rem;
+    color: #ff00ff;
+    margin-top: 5px;
+    text-shadow: 2px 2px 5px #000000;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.main-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #000080;
+    margin-top: 20px;
+    background-color: #ccffcc;
+    border: 3px solid #0000ff;
+    padding: 20px;
+    text-align: justify;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.bonzi_online {
+    width: 700px;
+    height: auto;
+}
+
+.label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000080;
+}
+
+input[type="text"],
+input[type="number"] {
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #0000ff;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 60%;
+    background-color: #ccffcc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+video, canvas {
+    border: 5px solid #ff00ff;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 300px;
+    max-height: 400px;
+    margin: 10px auto;
+    display: block;
+}
+
+.identiter {
+    border: 5px solid #ff00ff;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 300px;
+    max-height: 400px;
+    margin: 10px auto;
+    display: block;
+}
+
+select {
+    font-size: 1rem;
+    padding: 5px 10px;
+    border: 2px solid #0000ff;
+    border-radius: 5px;
+    background-color: #ccffcc;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  select:focus {
+    border-color: #0000ff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+
+#webcam {
+    width: 300px;
+    height: 200px;
+    border: 5px solid #ff00ff;
+    background-color: black;
+    display: block;
+    margin: auto;
+}

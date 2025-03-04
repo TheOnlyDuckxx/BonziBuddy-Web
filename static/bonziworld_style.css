@@ -1,0 +1,379 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: url('../static/wallpaper.jpg')  no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 10px;
+    image-rendering: pixelated;
+    text-transform: uppercase;
+}
+
+
+/* Menu principal */
+.desktop-icon {
+    width: 80px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    position: absolute;
+}
+
+
+.window {
+    position: absolute;
+    width: 300px;
+    height: auto;
+    background: white;
+    border: 2px solid #000;
+    display: none;
+    top: 50px;
+    left: 50px;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+}
+
+.window-header {
+    padding: 5px;
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #000080;
+    color: #FFF;
+    margin: 3px;
+}
+
+.max-btn {
+    font-size:11px;
+    outline:1px solid #000000;
+    background:#C0C0C0;
+    border-width:2px;
+    border-style:solid;
+    border-color:#FFFFFF #808080 #808080 #FFFFFF;
+    position:relative;
+    bottom:0px;
+}
+
+.reduce-btn {
+    font-size:11px;
+    outline:1px solid #000000;
+    background:#C0C0C0;
+    border-width:2px;
+    border-style:solid;
+    border-color:#FFFFFF #808080 #808080 #FFFFFF;
+    position:relative;
+    bottom:0px;
+}
+
+.close-btn {
+    font-size:11px;
+    outline:1px solid #000000;
+    background:#C0C0C0;
+    border-width:2px;
+    border-style:solid;
+    border-color:#FFFFFF #808080 #808080 #FFFFFF;
+    position:relative;
+    bottom:0px;
+}
+
+
+/* Barre des taches */
+.taskbar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: #dcdcdc;
+    box-shadow: inset 0 1.5px 0 0 #dcdcdc, inset 0 3px 0 0 #ffffff;
+    display: flex;
+    align-items: center;
+}
+
+.taskbar-icons {
+    cursor: pointer;
+}
+
+.start-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-width:1.5px;
+    border-style:solid;
+    border-color:#FFFFFF #808080 #808080 #FFFFFF;
+    outline:1px solid #000000;
+    cursor: pointer;
+    margin-left: 3px;
+}
+
+.start-btn:active {
+    box-shadow: inset 2px 2px #404040, inset -2px -2px #DFDFDF;
+    border-top-color: #808080;
+    border-left-color: #808080;
+    border-right-color: white;
+    border-bottom-color: white;
+}
+
+.clock {
+    margin-left: auto; 
+    box-shadow: inset -1.5px -1.5px 0 0 #fcfcfc, inset 1.5px 1.5px 0 0 #a099a1; display: grid;
+    place-items: center;
+    height: 34px;
+    width: 100px;
+    margin-right: 3px;
+}
+
+/* Start menu */
+.start-menu {
+    position: absolute;
+    width: 200px;
+    background: #dcdcdc;
+    border-color:#FFFFFF #808080 #808080 #FFFFFF;
+    border-width: 2px;
+    border-style:solid;
+    display: none;
+    bottom: 35px;
+    padding: 10px;
+    flex-direction: column;
+}
+
+.start-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.start-menu-item:hover {
+    background-color: #000080; /* Bleu Windows 95 */
+    color: white; /* Texte blanc pour le contraste */
+}
+
+.start-menu-item img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.power-options {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+
+
+/* Mail */
+
+.window-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    justify-content: center;
+    background-color: rgb(255, 248, 236);
+}
+
+  
+.title-bar .title {
+    font-weight: bold;
+}
+  
+.title-bar .buttons .button {
+    background-color: silver;
+    border: 2px outset;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    margin-left: 4px;
+    text-align: center;
+    line-height: 16px;
+}
+  
+.menu-bar span {
+    margin-right: 15px;
+    cursor: pointer;
+}
+  
+.sidebar {
+    width: 200px;
+    background-color: #D3D3D3;
+    border-right: 2px solid black;
+    padding: 8px;
+    height: 100%;
+    overflow-y: auto;
+}
+  
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+  
+.sidebar li {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+  
+.email-list {
+    flex: 1;
+    background-color: rgb(255, 248, 236);
+    padding: 8px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+  
+.email-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #D3D3D3;
+    padding: 4px 0;
+    cursor: pointer;
+}
+  
+.email-sender {
+    font-weight: bold;
+}
+  
+.email-subject {
+    flex: 1;
+    margin-left: 10px;
+}
+  
+.email-date {
+    font-size: 12px;
+    color: gray;
+}
+  
+.sender {
+    border-bottom: 1px solid #D3D3D3;
+    border-top: 1px solid #D3D3D3;
+}
+
+.res_title {
+    background-color:#efefef;
+}
+
+.email-content {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: none;
+    height: 100%;
+    background-color: rgb(255, 248, 236);
+}
+
+.fullscreen .window-content {
+    height: calc(100vh - 30px);
+}
+
+.fullscreen .email-list, 
+.fullscreen .email-content {
+    height: calc(100vh - 30px);
+}
+
+/* Navigateur */
+
+.window-content2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background-color: rgb(255, 248, 236);
+}
+
+#Box {
+    border: 2px solid #b7d2e4;
+    border-radius: 3px;
+    width: auto;
+    height: 40px;
+    font-size: 20px;
+    background-color: rgb(255, 252, 248);
+}
+
+#Box::placeholder {
+    color: gray; 
+    opacity: 1; 
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+#loupe {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    margin-left: 10px; 
+    
+}
+
+#txt-accueil {
+    text-align: center;
+
+}
+
+#bonzinet_img {
+    border: 3px solid #686868;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #A0E1FF, #4D9FEC, #87CEFA);
+}
+
+.dino_jeu {
+    text-align: center; /* Centre le contenu en texte */
+    background: #C3C3C3; /* Fond gris Windows 95 */
+    padding: 20px;
+    border: 3px solid #808080;
+    border-top-color: white;
+    border-left-color: white;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    align-items: center;
+}
+
+canvas {
+    background-color: #f4f4f4;
+    display: block;
+    margin: 0 auto; /* Centre le canvas */
+    border: 2px solid black;
+}
+
+/* Bonzi Buddy */
+
+#bonzi-container {
+    position: absolute;
+    bottom: 50px;
+    right: 25px;
+    width: 225px;
+    text-align: center;
+}
+
+#bonzi {
+    width: 100%;
+    cursor: pointer;
+}
+
+#dialogue-box {
+    position: absolute;
+    bottom: 160px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    display: none;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}

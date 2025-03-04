@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonzi World</title>
+    <link rel="stylesheet" type="text/css" href="../static/bonziworld_style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="../static/bonziworld_script.js" defer></script>
+</head>
+<body >
+    <!-- Icones du bureau -->
+    <div class="desktop-icon" style="top: 10px; left: 10px;" ondblclick="openWindow('app1')">
+        <img src="../static/mail.ico" width=55px height=55px alt='Mail'>
+        <div>Boîte Mail</div>
+    </div>
+    <div class="desktop-icon" style="top: 110px; left: 10px;" ondblclick="openWindow('app2')">
+        <img src="../static/bonzinet.ico" width=55px height=55px alt="Navigateur">
+        <div>Web Browser</div>
+    </div>
+    <div class="desktop-icon" style="top: 210px; left: 10px;" ondblclick="openWindow('app3')">
+        <img src="../static/game.ico" width=55px height=55px alt="Jeux">
+        <div>Mini-jeu</div>
+    </div>
+
+    <!-- Boite mail -->
+    <div class="window" id="app1">
+        <div class="window-header" onmousedown="startDrag(event, 'app1')">
+            Boîte Mail 
+            <div>
+                <button class="max-btn" onclick="toggleFullScreen('app1')">□</button>
+                <button class="reduce-btn" onclick="minimizeWindow('app1')">_</button>
+                <button class="close-btn" onclick="closeWindow('app1')">X</button>
+            </div>
+        </div>
+
+        <div class="window-content">
+            <div class="sidebar">
+                <ul>
+                    <li onclick="showInbox()">Boîte de réception</li>
+                    <li>Messages envoyés</li>
+                    <li>Brouillons</li>
+                    <li>Corbeille</li>
+                </ul>
+            </div>
+        
+            <div class="email-list" id="email-list"></div>
+        
+            <div class="email-content" id="email-content">
+                <h2 class="res_title" id="email-title"></h2>
+                <h3 class="sender" id="email-sender"></h3>
+                <p id="email-body"></p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Navigateur -->
+    <div class="window" id="app2">
+        <div class="window-header" onmousedown="startDrag(event, 'app2')">
+            Bonzi-Net
+            <div>
+                <button class="max-btn" onclick="toggleFullScreen('app2')">□</button>
+                <button class="reduce-btn" onclick="minimizeWindow('app2')">_</button>
+                <button class="close-btn" onclick="closeWindow('app2')">X</button>
+            </div>
+        </div>
+        <div id="window-content2" class="window-content2">
+            <img id="bonzinet_img" src="../static/tete_bonzi.png" alt="Bonzi" width="200" height="200">
+            <h1 id ="txt-accueil">Bienvenue sur BonziNet !</h1>
+            <br>
+            <div class="search-container">
+                <input id="Box" type="text" placeholder="Entrez un mot-clé...">
+                <img id = "loupe" src = ../static/search.ico onclick="Recherche()">
+            </div>
+            <br>
+            <h2 style="font-size: 10px;">Les recherches se font en miniscules</h2>
+            <button id="btn-retour" onclick="retourAccueil()" style="display: none;">⬅ Retour</button>
+        </div>
+    </div>
+
+    <!-- Mini-jeu -->
+    <div class="window" id="app3">
+        <div class="window-header" onmousedown="startDrag(event, 'app3')">
+            Mini-jeu 
+            <div>
+                <button class="max-btn" onclick="toggleFullScreen('app3')">□</button>
+                <button class="reduce-btn" onclick="minimizeWindow('app3')">_</button>
+                <button class="close-btn" onclick="closeWindow('app3')">X</button>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="dino_jeu">
+                <h1>DinoRun</h1>
+                <canvas id="gameCanvas"></canvas>
+                <script>
+                    const canvas = document.getElementById("gameCanvas");
+                    const ctx = canvas.getContext("2d");
+                    canvas.width = 800;
+                    canvas.height = 300;
+            
+                    const obstacleImg = new Image();
+                    obstacleImg.src = "../static/cactus.gif"; // Remplace par le chemin de ton GIF
+            
+                    const trexImg = new Image();
+                    trexImg.src = "../static/trex.gif"; // Remplace par le chemin de ton GIF
+            
+                    let trex, obstacles, score, gameOver, message, record = 0;
+                    
+                    function init() {
+                        trex = { x: 50, y: 220, width: 40, height: 40, vy: 0, gravity: 1, jumping: false };
+                        obstacles = [];
+                        score = 0;
+                        gameOver = false;
+                        message = "";
+                    }
+                    
+                    document.addEventListener("keydown", (e) => {
+                        if (e.code === "Space" && !trex.jumping) {
+                            trex.vy = -15;
+                            trex.jumping = true;
+                        }
+                        if (e.code === "Enter" && gameOver) {  // Ajoute ce bloc pour détecter la touche "Enter"
+                            restartGame();
+                        }
+                    });
+            
+                    function update() {
+                        if (gameOver) return;
+
+                        trex.y += trex.vy;
+                        trex.vy += trex.gravity;
+                        if (trex.y > 220) {
+                            trex.y = 220;
+                            trex.jumping = false;
+                        }
+
+                        if (Math.random() < 0.01) {
+                            obstacles.push({ x: 800, y: 220, width: 20, height: 40 });
+                        }
+
+                        obstacles.forEach(obstacle => {
+                            obstacle.x -= 5;
+                        });
+                        
+                        obstacles = obstacles.filter(obstacle => obstacle.x > -40);
+                        
+                        obstacles.forEach(obstacle => {
+                            if (trex.x < obstacle.x + obstacle.width &&
+                                trex.x + trex.width > obstacle.x &&
+                                trex.y < obstacle.y + obstacle.height &&
+                                trex.y + trex.height > obstacle.y) {
+                                gameOver = true;
+                                if (score > record) {
+                                    record = score;
+                                }
+
+                                bonziMockPlayer(); // 📌 Bonzi réagit immédiatement à la défaite !
+                            }
+                        });
+
+                        score++;
+                        
+                        if (score > 1999) {
+                            message = "GAmE OvER";
+                        } else if (score > 100) {
+                            message = "GAME OVER";
+                            message2 = "recommencer: press (enter)";
+                        }
+                    }
+            
+                    function draw() {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        
+                        ctx.fillStyle = "black";
+                        ctx.font = "20px Arial";
+                        ctx.fillText(`Record: ${record}`, 10, 50);
+                        ctx.fillText(`Score: ${score}`, 10, 20);
+                        
+                        ctx.drawImage(trexImg, trex.x, trex.y, trex.width, trex.height);
+                        
+                        obstacles.forEach(obstacle => {
+                            ctx.drawImage(obstacleImg, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                        });
+                        
+                        if (gameOver) {
+                            ctx.fillText(message, canvas.width / 2 - 100, canvas.height / 2);
+                            ctx.fillText(message2, canvas.width / 2 - 100, canvas.height / 1.8);
+                        }
+                    }
+            
+                    function loop() {
+                        update();
+                        draw();
+                        if (!gameOver) requestAnimationFrame(loop);
+                    }
+            
+                    function restartGame() {
+                        init();
+                        loop();
+                    }
+            
+                    init();
+                    loop();
+                </script>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Barre des taches -->
+    <div class="taskbar" id="taskbar">
+
+        <div class="start-btn" onclick="openStartMenu()">
+            <img src="../static/start.png" width="30" height="30" alt="Start"> Start  
+        </div>
+    
+        <div class="taskbar-icons" id="task-app1" style="display: none; margin-left: 50px;" onclick="openWindow('app1')">
+            <img src="../static/mail.ico" width="30" height="30" alt="Boite Mail"> Boite Mail
+        </div>
+    
+        <div class="taskbar-icons" id="task-app2" style="display: none; margin-left: 50px;" onclick="openWindow('app2')">
+            <img src="../static/bonzinet.ico" width="30" height="30" alt="Navigateur"> Navigateur
+        </div>
+
+        <div class="taskbar-icons" id="task-app3" style="display: none; margin-left: 50px;" onclick="openWindow('app3')">
+            <img src="../static/game.ico" width="30" height="30" alt="Mini-jeu"> Mini-jeu
+        </div>
+
+        <div class="clock"> 
+            <p id="clock">--:--:--</p>
+        </div>
+    </div>
+    
+    <!-- Menu démarrer -->
+    <div class="start-menu" id="start-menu">
+        <p style="border-bottom: 2px solid #878787;">Bonjour {{ prenom }} !</p>
+        <div class="power-options">
+            <div class="start-menu-item" onclick="window.location.href='identite'">
+                <img src="../static/shutdown.ico" alt="Shutdown">
+                <p>Éteindre</p>
+            </div>
+            <div class="start-menu-item" onclick="receiveEmail('test','admin', 'Test', 'Ceci est un test')">
+                <img src="../static/restart.ico" alt="Restart">
+                <p>Redémarrer</p>
+            </div>
+            <div class="start-menu-item" onclick="window.location.href='connexion'">
+                <img src="../static/logout.ico" alt="Logout">
+                <p>Changer d'utilisateur</p>
+            </div>
+            <div class="start-menu-item">
+                <img src="../static/lock.ico" alt="Lock">
+                <p>Verrouiller</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bonzi Buddy -->
+    <div id="bonzi-container">
+        <img id="bonzi" src="" alt="BonziBuddy">
+        <div id="dialogue-box" style="display: none;">
+            <p id="dialogue-text"></p>
+        </div>
+        <audio id="bonzi-audio"></audio>
+    </div>
+
+</body>
+</html>

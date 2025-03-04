@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #111;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#jumpscareImage {
+    display: none;  /* C'est caché par défaut */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;  /* S'adapte à l'écran */
+}

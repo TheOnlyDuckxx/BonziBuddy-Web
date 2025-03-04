@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerte Windows 95</title>
+    <link rel="stylesheet" href="../static/imp_style.css">
+</head>
+<body>
+
+    <div id="win95-alert">
+        <div class="alert-header">
+            <span class="alert-title">Alerte</span>
+            <button class="close-btn" onclick="closeAlert()">X</button>
+        </div>
+        <div class="alert-body">
+            <p>📩 Vous avez reçu un message !</p>
+            <button class="ok-btn" onclick="askPermission()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        function askPermission() {
+            // Demande à l'utilisateur s'il veut imprimer le fichier PDF
+            if (confirm("Voulez-vous imprimer ce document PDF ?")) {
+                printPDF();
+            } else {
+                closeAlert();
+            }
+        }
+
+        function printPDF() {
+            var pdfPath = 'static/bonzi.pdf'; // Chemin du fichier PDF
+            var iframe = document.createElement('iframe'); // Crée un iframe
+            iframe.style.display = 'none'; // Cache l'iframe
+            iframe.src = pdfPath; // Définit le PDF à charger
+            document.body.appendChild(iframe); // Ajoute l'iframe à la page
+
+            // Attendre que le PDF soit chargé avant d'imprimer
+            iframe.onload = function() {
+                setTimeout(() => {
+                    iframe.contentWindow.print(); // Ouvre la boîte de dialogue d'impression
+                    document.body.removeChild(iframe); // Supprime l'iframe après impression
+                }, 500); // Attente de 500ms
+            };
+
+            closeAlert(); // Ferme l'alerte après avoir cliqué sur "OK"
+        }
+
+        function closeAlert() {
+            document.getElementById("win95-alert").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
+
