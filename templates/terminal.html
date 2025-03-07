@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/terminal_style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal de Commande</title>
+</head>
+<body>
+    <div id="terminal">
+        <div id="output"></div>
+        <div id="input-container">
+            <span id="prompt">Terminal: ~ (Sélectionne un dossier)$ </span>
+            <input type="text" id="input" autofocus>
+        </div>
+    </div>
+
+    <script>
+        let currentDirectory = null;
+        let pathHistory = [];
+
+        const inputField = document.getElementById("input");
+        const outputDiv = document.getElementById("output");
+        const promptSpan = document.getElementById("prompt");
+
+        function printToTerminal(text, isCommand = false) {
+            outputDiv.innerHTML += isCommand ? `<b>${text}</b><br>` : `${text}<br>`;
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        }
+
+        let isDeleting = false;
+
+        async function waitForConfirmation() {
+            return new Promise(resolve => {
+                inputField.addEventListener("keydown", function confirmDeletion(event) {
+                    if (event.key === "Enter") {
+                        const response = inputField.value.trim().toLowerCase();
+                        if (response === "oui") {
+                            // Si l'utilisateur répond "oui", on commence la suppression
+                            deleteBonzi();
+                        } else if (response === "non") {
+                            // Si l'utilisateur répond "non", on annule la suppression
+                            printToTerminal("Suppression annulée.");
+                            resolve();
+                        } else {
+                            // Si la réponse est invalide
+                            printToTerminal("Réponse invalide. Tapez 'oui' pour continuer ou 'non' pour annuler.");
+                        }
+
+                        // Réinitialisation du champ de texte
+                        inputField.value = "";
+                    }
+                });
+            });
+        }
+
+        // Fonction pour simuler la suppression de Bonzi
+        function simulateDeletion() {
+            if (isDeleting) {
+                let progress = 0;
+                let interval = setInterval(() => {
+                    if (progress < 562) {
+                        progress++;
+                        printToTerminal(`Suppression de Bonzi en cours [${progress}/562]`);
+                    } else {
+                        clearInterval(interval);
+                        finishDeletion();
+                    }
+                }, 50); // Intervalles de 50 ms pour faire durer la suppression en 30 secondes
+            }
+        }
+
+        function finishDeletion() {
+            printToTerminal("Suppression terminée.");
+
+            // Rediriger vers la page "/credit"
+            window.location.href = "/credit";
+        }
+
+        async function selectDirectory() {
+            try {
+                currentDirectory = await window.showDirectoryPicker();
+                pathHistory = [currentDirectory];
+                updatePrompt();
+                printToTerminal(`Dossier sélectionné: <b>${currentDirectory.name}</b>`);
+            } catch (err) {
+                printToTerminal("Accès au dossier annulé.");
+            }
+        }
+
+        async function listFiles() {
+            if (!currentDirectory) {
+                printToTerminal("Sélectionne d'abord un dossier avec 'select'");
+                return;
+            }
+
+            let files = [];
+            for await (const entry of currentDirectory.values()) {
+                files.push(entry.kind === "directory" ? `[D] ${entry.name}` : `[F] ${entry.name}`);
+            }
+
+            printToTerminal(`Contenu de <b>${currentDirectory.name}</b>:<br>${files.join("<br>") || "(Dossier vide)"}`);
+        }
+
+        async function changeDirectory(folderName) {
+            if (!currentDirectory) {
+                printToTerminal("Sélectionne d'abord un dossier avec 'select'");
+                return;
+            }
+
+            try {
+                const newDir = await currentDirectory.getDirectoryHandle(folderName, { create: false });
+                pathHistory.push(newDir);
+                currentDirectory = newDir;
+                updatePrompt();
+                printToTerminal(`Changement de dossier: <b>${folderName}</b>`);
+            } catch (err) {
+                printToTerminal(`Impossible d'accéder à <b>${folderName}</b>.`);
+            }
+        }
+
+        function goBack() {
+            if (pathHistory.length > 1) {
+                pathHistory.pop();
+                currentDirectory = pathHistory[pathHistory.length - 1];
+                updatePrompt();
+                printToTerminal("Retour au dossier précédent.");
+            } else {
+                printToTerminal("Déjà au niveau racine.");
+            }
+        }
+
+        async function openFile(filename) {
+        if (!currentDirectory) {
+            printToTerminal("Sélectionne d'abord un dossier avec 'select'");
+            return;
+        }
+
+        try {
+            const fileHandle = await currentDirectory.getFileHandle(filename, { create: false });
+            const file = await fileHandle.getFile();
+
+            if (filename === "delete_bonzi.bat") {
+                // Affichage du message de confirmation
+                printToTerminal("Etes-vous sûr de vouloir supprimer Bonzi ? Cette action sera irréversible. (oui/non)");
+
+                // On attend la réponse de l'utilisateur
+                await waitForConfirmation();
+            }
+            else {
+                if (file.type.startsWith("image/")) {
+                    const imageUrl = URL.createObjectURL(file);
+                    printToTerminal(`<br> <img src="${imageUrl}" alt="${filename}">`);
+                } else {
+                    const content = await file.text();
+                    printToTerminal(`Contenu de <b>${filename}</b>:<br>---<br>${content.split("\n").slice(0, 10).join("<br>")}<br>---`);
+                }
+            }
+        } catch (err) {
+            printToTerminal(`Impossible d'ouvrir <b>${filename}</b>. Vérifie son existence.`);
+        }
+    }
+
+        function showHelp() {
+            const helpText = `
+            <b>Liste des commandes disponibles :</b><br>
+            <b>select</b> - Choisir un dossier<br>
+            <b>ls</b> - Lister les fichiers et dossiers<br>
+            <b>cd [nom_dossier]</b> - Entrer dans un dossier<br>
+            <b>retour</b> - Revenir au dossier précédent<br>
+            <b>open [nom_fichier]</b> - Ouvrir un fichier (texte ou image)<br>
+            <b>help</b> - Afficher cette aide
+            `;
+            printToTerminal(helpText);
+        }
+
+        function executeCommand(command) {
+            if (command.trim() === "") return;
+
+            const parts = command.split(" ");
+            const cmd = parts[0].toLowerCase();
+
+            if (cmd === "select") {
+                selectDirectory();
+            } else if (cmd === "ls") {
+                listFiles();
+            } else if (cmd === "cd" && parts.length > 1) {
+                changeDirectory(parts[1]);
+            } else if (cmd === "open" && parts.length > 1) {
+                openFile(parts[1]);
+            } else if (cmd === "retour") {
+                goBack();
+            } else if (cmd === "help") {
+                showHelp();
+            } else {
+                printToTerminal("Commande inconnue. Tapez <b>help</b> pour voir la liste.");
+            }
+        }
+
+        function updatePrompt() {
+            let location = currentDirectory ? currentDirectory.name : "~ (Sélectionne un dossier)";
+            promptSpan.textContent = `Terminal: ${location}$ `;
+            inputField.value = "";
+        }
+
+        inputField.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                const command = this.value.trim();
+                printToTerminal(`Terminal: ${currentDirectory ? currentDirectory.name : "~"}$ ${command}`, true);
+                executeCommand(command);
+                updatePrompt();
+            }
+        });
+
+        updatePrompt();
+    </script>
+</body>
+</html>

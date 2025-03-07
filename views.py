@@ -11,6 +11,7 @@ prenom='Buddy'
 age='99'
 sexe='Singe'
 screenshot = 'N'
+bonzi_game_finished = False
 
 @app.route('/mark-email-read', methods=['POST'])
 def mark_email_read():
@@ -84,6 +85,10 @@ def login():
 def blog():
     return render_template('bonziblog.html')
 
+@app.route('/wiki')
+def wiki():
+    return render_template('wiki.html')
+
 @app.route('/BonzIw0rld')
 def terminal():
     return render_template('terminal.html')
@@ -96,6 +101,23 @@ def identite():
 @app.route('/jeu')
 def index():
     return render_template('jeu.html')
+
+@app.route('/set-bonzi-game-finished', methods=['POST'])
+def set_bonzi_game_finished():
+    global bonzi_game_finished
+    bonzi_game_finished = True
+    return jsonify({"message": "Bonzi game marked as finished."})
+
+@app.route('/get-bonzi-game-status', methods=['GET'])
+def get_bonzi_game_status():
+    return jsonify({"bonzi_game_finished": bonzi_game_finished})
+
+@app.route('/reset-bonzi-game', methods=['POST'])
+def reset_bonzi_game():
+    """ Réinitialise l'état du jeu à False quand une nouvelle partie commence """
+    global bonzi_game_finished
+    bonzi_game_finished = False
+    return jsonify({"message": "Bonzi game reset."})
 
 @app.route('/get-bonzi-progress')
 def get_bonzi_progress():

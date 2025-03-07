@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #202122;
+    margin: 0;
+    padding: 0;
+}
+#container {
+    max-width: 900px;
+    margin: auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    font-size: 24px;
+    border-bottom: 1px solid #a2a9b1;
+    padding-bottom: 5px;
+}
+.infobox {
+    float: right;
+    width: 250px;
+    background: #f8f9fa;
+    padding: 10px;
+    border: 1px solid #a2a9b1;
+    font-size: 14px;
+    margin-left: 20px;
+}
+.infobox img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    float: left;
+
+}
+.content {
+    text-align: justify;
+}
+
+h2{
+    font-size: 18px;
+    text-align: center;
+
+}

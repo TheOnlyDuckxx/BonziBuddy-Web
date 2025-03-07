@@ -1,4 +1,4 @@
-// Initialisation de la scène Three.js
+// Initialisation de la scène Three.js
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("gameCanvas") });
@@ -11,7 +11,7 @@ const textureLoader = new THREE.TextureLoader();
 const wallTexture = textureLoader.load("../static/wall.png");
 const floorTexture = textureLoader.load("../static/floor.jpg");
 
-// Appliquer la répétition de la texture
+// Appliquer la répétition de la texture
 wallTexture.wrapS = THREE.RepeatWrapping;
 wallTexture.wrapT = THREE.RepeatWrapping;
 wallTexture.repeat.set(10, 1);
@@ -29,7 +29,7 @@ const numSegments = 5;
 const tunnelSegments = [];
 const segmentLights = [];
 
-// Fonction pour créer un segment de tunnel
+// Fonction pour créer un segment de tunnel
 function createTunnelSegment(zPosition) {
     const wallGeometry = new THREE.BoxGeometry(tunnelWidth, tunnelHeight, tunnelLength);
     const wallMaterial = new THREE.MeshStandardMaterial({ map: wallTexture, side: THREE.DoubleSide });
@@ -60,7 +60,7 @@ for (let i = 0; i < numSegments; i++) {
     createTunnelSegment(i * tunnelLength);
 }
 
-// Effet de lumières vacillantes
+// Effet de lumières vacillantes
 setInterval(() => {
     segmentLights.forEach(({ light1, light2 }) => {
         light1.intensity = Math.random() * 2;
@@ -68,27 +68,23 @@ setInterval(() => {
     });
 }, 300);
 
-// Musique d'ambiance (joue uniquement si la touche Z est enfoncée)
+// Musique d'ambiance (joue uniquement si la touche Z est enfoncée)
 const ambientSound = new Audio('../static/ambience.mp3');
 ambientSound.loop = true;
 let isMusicPlaying = false;
 
 // Gestion des touches
 let keys = {};
-document.addEventListener("keydown", (e) => {
+window.addEventListener("keydown", (e) => {
     keys[e.code] = true;
     if (e.code === "KeyZ" && !isMusicPlaying) {
         ambientSound.play();
         isMusicPlaying = true;
     }
 });
-document.addEventListener("keyup", (e) => {
+
+window.addEventListener("keyup", (e) => {
     keys[e.code] = false;
-    if (e.code === "KeyZ") {
-        ambientSound.pause();
-        ambientSound.currentTime = 0; // Remettre la musique au début
-        isMusicPlaying = false;
-    }
 });
 
 // Son du jump scare
@@ -96,43 +92,61 @@ const jumpScareSound = new Audio('../static/jumpscare.mp3');
 
 // Fonction pour afficher le jump scare
 let isJumpScareActive = false;
+let passedJumpScare = false;
 function triggerJumpScare() {
     if (!isJumpScareActive) {
         isJumpScareActive = true;
         document.getElementById('jumpscareImage').style.display = 'block';
         jumpScareSound.play();
+        
         setTimeout(() => {
             document.getElementById('jumpscareImage').style.display = 'none';
             isJumpScareActive = false;
+
+            // ✅ Maintenant on envoie bien la requête après le jumpscare
+            fetch('/set-bonzi-game-finished', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => console.log("Jeu de Bonzi terminé :", data))
+            .catch(error => console.error("Erreur lors de la notification du jeu terminé :", error));
+            
         }, 3000);
+
+        // ✅ Marquer que le jumpscare a bien eu lieu
+        passedJumpScare = true;
     }
 }
 
-// Fonction pour planifier le prochain jump scare aléatoirement entre 6 et 15 secondes
+// Fonction pour planifier le prochain jump scare aléatoirement entre 6 et 15 secondes
 function scheduleJumpScare() {
-    const randomDelay = 15000 + Math.random() * 23000;
-    setTimeout(() => {
+    const randomDelay = 23000 + Math.random() * 30000; 
+    if (!passedJumpScare) setTimeout(() => {
         triggerJumpScare();
+        scheduleJumpScare(); // Planifier le prochain jump scare après celui-ci
     }, randomDelay);
 }
 
-// Démarrer le premier jump scare aléatoire après le chargement
+// Démarrer le premier jump scare aléatoire après le chargement
 scheduleJumpScare();
 
 // Mouvements du joueur
 camera.position.z = 0;
 camera.position.y = 1;
 function updatePlayerMovement() {
-    if (keys["KeyZ"]) camera.position.z += 0.2;
+    if (keys["KeyW"]) {
+        camera.position.z += 0.2;
+    }
 }
 
-// Effet de distorsion aléatoire
+// Effet de distorsion aléatoire
 function addGlitchEffect() {
     camera.position.x += (Math.random() - 0.5) * 0.1;
     camera.position.y += (Math.random() - 0.5) * 0.1;
 }
 
-// Mise à jour du tunnel
+// Mise à jour du tunnel
 function updateTunnel() {
     if (camera.position.z > tunnelSegments[tunnelSegments.length - 1].position.z - tunnelLength) {
         createTunnelSegment(tunnelSegments[tunnelSegments.length - 1].position.z + tunnelLength);

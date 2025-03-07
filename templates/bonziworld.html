@@ -117,29 +117,30 @@
                     }
                     
                     document.addEventListener("keydown", (e) => {
+                        let wind = document.getElementById('app3');
                         if (e.code === "Space" && !trex.jumping) {
                             trex.vy = -15;
                             trex.jumping = true;
                         }
-                        if (e.code === "Enter" && gameOver) {  // Ajoute ce bloc pour détecter la touche "Enter"
+                        if (e.code === "Enter" && gameOver && wind.style.display == "block") {  // Ajoute ce bloc pour détecter la touche "Enter"
                             restartGame();
                         }
                     });
             
                     function update() {
                         if (gameOver) return;
-
+            
                         trex.y += trex.vy;
                         trex.vy += trex.gravity;
                         if (trex.y > 220) {
                             trex.y = 220;
                             trex.jumping = false;
                         }
-
+            
                         if (Math.random() < 0.01) {
                             obstacles.push({ x: 800, y: 220, width: 20, height: 40 });
                         }
-
+            
                         obstacles.forEach(obstacle => {
                             obstacle.x -= 5;
                         });
@@ -152,18 +153,21 @@
                                 trex.y < obstacle.y + obstacle.height &&
                                 trex.y + trex.height > obstacle.y) {
                                 gameOver = true;
+
+                                
+
                                 if (score > record) {
                                     record = score;
                                 }
-
-                                bonziMockPlayer(); // 📌 Bonzi réagit immédiatement à la défaite !
+                                
+                                if (record != score)
+                                    bonziMockPlayer()
                             }
                         });
-
-                        score++;
                         
+                        score++;
                         if (score > 1999) {
-                            message = "GAmE OvER";
+                            message = "GA=1mE OvER";
                         } else if (score > 100) {
                             message = "GAME OVER";
                             message2 = "recommencer: press (enter)";
@@ -175,7 +179,7 @@
                         
                         ctx.fillStyle = "black";
                         ctx.font = "20px Arial";
-                        ctx.fillText(`Record: ${record}`, 10, 50);
+                        ctx.fillText(`Record: ${record}`, 10, 40);
                         ctx.fillText(`Score: ${score}`, 10, 20);
                         
                         ctx.drawImage(trexImg, trex.x, trex.y, trex.width, trex.height);
@@ -203,11 +207,48 @@
             
                     init();
                     loop();
+
                 </script>
+            </div>
             </div>
         </div>
     </div>
 
+    <div class="window" id="app4">
+        <div class="window-header" onmousedown="startDrag(event, 'app4')">
+            Bonzi - Test
+            <div>
+                <button class="max-btn" onclick="toggleFullScreen('app4')">□</button>
+                <button class="reduce-btn" onclick="minimizeWindow('app4')">_</button>
+                <button class="close-btn">X</button>
+            </div>
+        </div>
+        <div class="window-content2">
+            <h2>Voulez-vous passer le test de Bonzi ?</h2>
+            <div class="btn-container">
+                <button id="w2-btn1" onclick="startBonziTest()">Oui</button>
+                <button id="w2-btn2" onclick="closeWindow('app4')">Non</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="app5">
+        <div class="window-header" onmousedown="startDrag(event, 'app5')">
+            Bonzi - Game
+            <div>
+                <button class="max-btn">□</button>
+                <button class="reduce-btn">_</button>
+                <button class="close-btn">X</button>
+            </div>
+        </div>
+        <div class="window-content2" id="window-content3">
+            <h2>Voulez-vous jouer au jeu de Bonzi ?</h2>
+            <div class="btn-container">
+                <button id="w2-btn1" onclick="startGame()">Oui</button>
+                <button id="w2-btn2" onclick="closeWindow('app5')">Non</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Barre des taches -->
     <div class="taskbar" id="taskbar">
@@ -228,6 +269,10 @@
             <img src="../static/game.ico" width="30" height="30" alt="Mini-jeu"> Mini-jeu
         </div>
 
+        <div class="taskbar-icons" id="task-app4" style="display: none; margin-left: 50px;" onclick="openWindow('app4')">
+            <img src="../static/game.ico" width="30" height="30" alt="Mini-jeu"> Bonzi-Test
+        </div>
+
         <div class="clock"> 
             <p id="clock">--:--:--</p>
         </div>
@@ -237,11 +282,11 @@
     <div class="start-menu" id="start-menu">
         <p style="border-bottom: 2px solid #878787;">Bonjour {{ prenom }} !</p>
         <div class="power-options">
-            <div class="start-menu-item" onclick="window.location.href='identite'">
+            <div class="start-menu-item">
                 <img src="../static/shutdown.ico" alt="Shutdown">
                 <p>Éteindre</p>
             </div>
-            <div class="start-menu-item" onclick="receiveEmail('test','admin', 'Test', 'Ceci est un test')">
+            <div class="start-menu-item">
                 <img src="../static/restart.ico" alt="Restart">
                 <p>Redémarrer</p>
             </div>
@@ -257,12 +302,18 @@
     </div>
     
     <!-- Bonzi Buddy -->
+
+    <!-- onmousedown="startDrag(event, 'bonzi-container')" -->
     <div id="bonzi-container">
         <img id="bonzi" src="" alt="BonziBuddy">
         <div id="dialogue-box" style="display: none;">
             <p id="dialogue-text"></p>
         </div>
         <audio id="bonzi-audio"></audio>
+    </div>
+
+    <div id="progress-bar-container" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 225px; height: 30px; background-color: #f0f0f0; border: 1px solid #000; display: none;">
+        <div id="progress-bar" style="height: 100%; width: 0%; background-color: #4caf50;"></div>
     </div>
 
 </body>
