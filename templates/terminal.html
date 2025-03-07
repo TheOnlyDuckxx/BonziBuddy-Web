@@ -30,30 +30,6 @@
 
         let isDeleting = false;
 
-        async function waitForConfirmation() {
-            return new Promise(resolve => {
-                inputField.addEventListener("keydown", function confirmDeletion(event) {
-                    if (event.key === "Enter") {
-                        const response = inputField.value.trim().toLowerCase();
-                        if (response === "oui") {
-                            // Si l'utilisateur répond "oui", on commence la suppression
-                            deleteBonzi();
-                        } else if (response === "non") {
-                            // Si l'utilisateur répond "non", on annule la suppression
-                            printToTerminal("Suppression annulée.");
-                            resolve();
-                        } else {
-                            // Si la réponse est invalide
-                            printToTerminal("Réponse invalide. Tapez 'oui' pour continuer ou 'non' pour annuler.");
-                        }
-
-                        // Réinitialisation du champ de texte
-                        inputField.value = "";
-                    }
-                });
-            });
-        }
-
         // Fonction pour simuler la suppression de Bonzi
         function simulateDeletion() {
             if (isDeleting) {
@@ -140,14 +116,17 @@
             const fileHandle = await currentDirectory.getFileHandle(filename, { create: false });
             const file = await fileHandle.getFile();
 
-            if (filename === "delete_bonzi.bat") {
-                // Affichage du message de confirmation
-                printToTerminal("Etes-vous sûr de vouloir supprimer Bonzi ? Cette action sera irréversible. (oui/non)");
-
-                // On attend la réponse de l'utilisateur
-                await waitForConfirmation();
-            }
-            else {
+            if (file.name === "delete_bonzi.bat") {
+                // Affiche un message de confirmation avant de lancer la suppression
+                const userConfirmation = confirm("Êtes-vous sûr de vouloir supprimer Bonzi ? Cette action sera irréversible.");
+                if (userConfirmation) {
+                    printToTerminal("Suppression de Bonzi lancée...");
+                    isDeleting = true;
+                    simulateDeletion();
+                } else {
+                    printToTerminal("Suppression annulée.");
+                }
+            } else {
                 if (file.type.startsWith("image/")) {
                     const imageUrl = URL.createObjectURL(file);
                     printToTerminal(`<br> <img src="${imageUrl}" alt="${filename}">`);

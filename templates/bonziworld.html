@@ -18,7 +18,7 @@
         <img src="../static/bonzinet.ico" width=55px height=55px alt="Navigateur">
         <div>Web Browser</div>
     </div>
-    <div class="desktop-icon" style="top: 210px; left: 10px;" ondblclick="openWindow('app3')">
+    <div class="desktop-icon" style="top: 210px; left: 10px;" ondblclick="openWindow('app3')" onclick="receiveEmail('ad','Bonzi Team','Bonjour cher utilisateur, il semblerait que vous apréciez notre compagnon virtuel. Si vous voulez en apprendre plus sur votre meilleur ami, n\'hésitez pas à recherchez Bonzi dans votre moteur de recherche préféré !')">
         <img src="../static/game.ico" width=55px height=55px alt="Jeux">
         <div>Mini-jeu</div>
     </div>
@@ -61,11 +61,13 @@
         <div class="window-header" onmousedown="startDrag(event, 'app2')">
             Bonzi-Net
             <div>
+                <button id="btn-retour" onclick="retourAccueil()" style="display: none;">⬅ Retour</button>
                 <button class="max-btn" onclick="toggleFullScreen('app2')">□</button>
                 <button class="reduce-btn" onclick="minimizeWindow('app2')">_</button>
                 <button class="close-btn" onclick="closeWindow('app2')">X</button>
             </div>
         </div>
+        
         <div id="window-content2" class="window-content2">
             <img id="bonzinet_img" src="../static/tete_bonzi.png" alt="Bonzi" width="200" height="200">
             <h1 id ="txt-accueil">Bienvenue sur BonziNet !</h1>
@@ -166,7 +168,7 @@
                         });
                         
                         score++;
-                        if (score > 1999) {
+                        if (score > 1999) { //Si le jeu du dino est trop difficile, réduire cette variable
                             message = "GA=1mE OvER";
                         } else if (score > 100) {
                             message = "GAME OVER";

@@ -290,6 +290,7 @@ function Recherche() {
     let browserContent = document.getElementById("window-content2");
     let searchContainer = document.querySelector(".search-container");
     let accueilText = document.getElementById("txt-accueil");
+    let retourBtn = document.getElementById("btn-retour");
 
     // Liste des pages disponibles
     let pages = {
@@ -302,11 +303,24 @@ function Recherche() {
         browserContent.innerHTML = `<iframe src="${pages[input]}" style="width: 100%; height: 100%; border: none;"></iframe>`;
 
         // Masquer l’interface du navigateur
+        //retourBtn.style.display = "block";  (ne marche pas)
         searchContainer.style.display = "none";
         accueilText.style.display = "none";
     } else {
         alert("Page introuvable !");
     }
+}
+
+function retourAccueil() {
+    let browserContent = document.getElementById("browser-content");
+    let searchContainer = document.querySelector(".search-container");
+    let accueilText = document.getElementById("txt-accueil");
+    let retourBtn = document.getElementById("btn-retour");
+
+    // Réafficher l'interface du navigateur
+    searchContainer.style.display = "block";
+    accueilText.style.display = "block";
+    retourBtn.style.display = "none"; // Cacher le bouton retour
 }
 
 
@@ -515,7 +529,7 @@ function bonziMockPlayer() {
 
 
 
-// Bonzi Test
+// Bonzi Test (un peu buggé)
 
 let bonziTestQuestions = [
     { 
@@ -650,6 +664,9 @@ function bonziType() {
     
 }
 
+
+
+// Glitch de fond
 function backgroundGlitch() {
     let glitchIndex = 0;
     let maxLoops = 7;
@@ -676,6 +693,10 @@ setInterval(() => {
     }
 }, 1000);
 
+
+
+// Barre de progression
+
 function startProgressBar() {
     if (isProgressing) return;
     isProgressing = true;
@@ -700,6 +721,9 @@ function startProgressBar() {
 
 }
 
+
+
+// Bonzi Game
 function startGame() {
     let wContent = document.getElementById("window-content3");
     toggleFullScreen("app5");
