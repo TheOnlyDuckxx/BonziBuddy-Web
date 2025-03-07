@@ -18,7 +18,7 @@
         <img src="../static/bonzinet.ico" width=55px height=55px alt="Navigateur">
         <div>Web Browser</div>
     </div>
-    <div class="desktop-icon" style="top: 210px; left: 10px;" ondblclick="openWindow('app3')" onclick="receiveEmail('ad','Bonzi Team','Bonjour cher utilisateur, il semblerait que vous apréciez notre compagnon virtuel. Si vous voulez en apprendre plus sur votre meilleur ami, n\'hésitez pas à recherchez Bonzi dans votre moteur de recherche préféré !')">
+    <div class="desktop-icon" style="top: 210px; left: 10px;" ondblclick="openWindow('app3')">
         <img src="../static/game.ico" width=55px height=55px alt="Jeux">
         <div>Mini-jeu</div>
     </div>
@@ -57,6 +57,7 @@
 
 
     <!-- Navigateur -->
+     <!-- Pour retourner à l'interface normale du navigateur, il faut recharger la page :( -->
     <div class="window" id="app2">
         <div class="window-header" onmousedown="startDrag(event, 'app2')">
             Bonzi-Net
@@ -169,7 +170,7 @@
                         
                         score++;
                         if (score > 1999) { //Si le jeu du dino est trop difficile, réduire cette variable
-                            message = "GA=1mE OvER";
+                            message = "GA=1ME OVER";
                         } else if (score > 100) {
                             message = "GAME OVER";
                             message2 = "recommencer: press (enter)";
@@ -284,7 +285,7 @@
     <div class="start-menu" id="start-menu">
         <p style="border-bottom: 2px solid #878787;">Bonjour {{ prenom }} !</p>
         <div class="power-options">
-            <div class="start-menu-item">
+            <div class="start-menu-item" onclick="receiveEmail('ad-bonzi', 'Bonzi Team', 'Apprenez en plus sur votre assistant !','Bonjour cher utilisateur, il semblerait que vous appréciez notre compagnon virtuel. Si vous voulez en apprendre plus sur votre meilleur ami, n\'hésitez pas à rechercher BonziBuddy dans votre moteur de recherche préféré !');">
                 <img src="../static/shutdown.ico" alt="Shutdown">
                 <p>Éteindre</p>
             </div>

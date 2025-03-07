@@ -69,6 +69,11 @@ def bonziworld2():
     global nom, prenom, age, sexe, screenshot
     return render_template('bonziworld.html', nom=nom, prenom=prenom, age=age, sexe=sexe)
 
+@app.route('/credit')
+def credit():
+    return render_template('end_page.html')
+
+
 @app.route('/')
 def accueil():
     return render_template('accueil.html')

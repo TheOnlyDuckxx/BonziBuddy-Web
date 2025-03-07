@@ -68,6 +68,8 @@ function openStartMenu() {
     }
 }  
 
+
+
 function closeWindow(id) {
     let win = document.getElementById(id);
     let taskIcon = document.getElementById("task-" + id);
