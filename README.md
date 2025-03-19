@@ -33,15 +33,12 @@ Vous devrez explorer, résoudre des énigmes et affronter Bonzi pour essayer de 
    
    cd bonzibuddy-web
    
-2. Installez les dépendances :
-   
-   pip install -r requirements.txt
-   
+  
 2. Lancez le serveur Flask :
    
-   python views.py
+   python main.py
    
-4. Ouvrez votre navigateur et accédez à http://127.0.0.1:5000
+3. Ouvrez votre navigateur et accédez à http://127.0.0.1:5000
 
 ## 👨‍💻 Technologies utilisées ## 
 
