@@ -8,8 +8,8 @@ document.body.appendChild(renderer.domElement);
 
 // Chargement des textures
 const textureLoader = new THREE.TextureLoader();
-const wallTexture = textureLoader.load("../static/wall.png");
-const floorTexture = textureLoader.load("../static/floor.jpg");
+const wallTexture = textureLoader.load("../static/img/wall.png");
+const floorTexture = textureLoader.load("../static/img/floor.jpg");
 
 // Appliquer la répétition de la texture
 wallTexture.wrapS = THREE.RepeatWrapping;
@@ -69,7 +69,7 @@ setInterval(() => {
 }, 300);
 
 // Musique d'ambiance (joue uniquement si la touche Z est enfoncée)
-const ambientSound = new Audio('../static/ambience.mp3');
+const ambientSound = new Audio('../static/audio/ambience.mp3');
 ambientSound.loop = true;
 let isMusicPlaying = false;
 
@@ -88,7 +88,7 @@ window.addEventListener("keyup", (e) => {
 });
 
 // Son du jump scare
-const jumpScareSound = new Audio('../static/jumpscare.mp3');
+const jumpScareSound = new Audio('../static/img/jumpscare.mp3');
 
 // Fonction pour afficher le jump scare
 let isJumpScareActive = false;

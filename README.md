@@ -61,7 +61,7 @@ Multimédia : GIFs animés, fichiers audio et images
  Implémenter une fin alternative selon les choix du joueur.
  
 ## 🎨 Crédits ##
-Projet réalisé par Timéo, Noa et Saiseewam.
+Projet réalisé par Timéo, Noa et Saiseevam.
 
 Inspiré du BonziBuddy original, des nombreux autres agents Microsofts et des expériences de jeux interactifs comme KinitoPet.
 

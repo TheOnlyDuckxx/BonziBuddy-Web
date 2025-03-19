@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/terminal_style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal de Commande</title>
+    <script src="../static/terminal.js" defer></script>
+</head>
+<body>
+    <input type="file" id="directory-picker" webkitdirectory directory style="display: none;">
+    <div id="terminal">
+        <div id="output"></div>
+        <div id="input-container">
+            <span id="prompt">Terminal: ~ (Sélectionne un dossier)$ </span>
+            <input type="text" id="input" autofocus>
+        </div>
+    </div>
+</body>
+</html>

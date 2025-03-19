@@ -1,0 +1,100 @@
+/* Centrage et ajustement automatique */
+body {
+    font-family: "OCR-B", "Arial", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f8f8;
+    overflow: hidden;
+}
+
+/* Conteneur principal de la carte */
+.background {
+    position: relative;
+    width: 90vw; /* La carte prend 90% de la largeur de l’écran */
+    max-width: 1600px; /* Taille maximale */
+    aspect-ratio: 16 / 9; /* Garde les proportions */
+    background-image: url('../static/img/carte_identite.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ✅ Placement des textes ajusté (basé sur l’image 1600x900) */
+p {
+    position: absolute;
+    font-size: 1vw; /* Ajustable pour s'adapter */
+    font-weight: bold;
+    color: #585858;
+}
+
+/* 📌 Correction des positions */
+.nom {
+    left: 45%;
+    top: 28%;
+}
+
+.prenom {
+    left: 48%;
+    top: 35%;
+}
+
+.naissance {
+    left: 61%;
+    top: 42%;
+}
+
+.sexe {
+    left: 45%;
+    top: 42%;
+}
+
+.taille {
+    left: 45%;
+    top: 50%;
+}
+
+.n° {
+    left: 48%;
+    top: 23%;
+}
+
+.n°_bas {
+    left: 67%;
+    top: 68%;
+}
+
+.n°_bas2 {
+    left: 64%;
+    top: 74%;
+}
+
+.id {
+    left: 26%;
+    top: 68%;
+}
+
+.num_pr {
+    left: 26%;
+    top: 74%;
+}
+
+.prenom2 {
+    left: 53%;
+    top: 74%;
+}
+
+/* ✅ Placement précis de la photo */
+.screenshot {
+    position: absolute;
+    left: 22%;
+    top: 27%;
+    width: 18%;
+    height: 40%;
+}

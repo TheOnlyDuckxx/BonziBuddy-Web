@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/connexion.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>Connexion</title>
+    <script src="../static/connexion.js"></script>
+    
+</head>
+<body>
+    <img src="../static/img/user.ico">
+    <h2>Connexion</h2>
+    <input type="text" id="username" placeholder="Identifiant" required>
+    <input type="password" id="password" placeholder="Mot de passe" required>
+    <button onclick="login()">Se connecter</button>
+    <p id="error-message" class="error"></p>
+    <div class="retour" onclick="window.location.href='BonziWorld'" method="post">
+        <img src="../static/img/retour.ico" height="32px" width="32px">
+        <p>Retour</p>
+    </div>
+
+    <div id="bonzi-container" onclick="playSpeDialogue('Hmmm... je ne pense pas qu\'il y ait quelque chose à voir ici.','../static/audio/nothing_here.wav','../static/anim_bonzi/bonzi_confuse.gif')">
+        <img id="bonzi" src="../static/anim_bonzi/bonzi_baille.gif" alt="BonziBuddy">
+        <div id="dialogue-box" style="display: none;">
+            <p id="dialogue-text"></p>
+        </div>
+        <audio id="bonzi-audio"></audio>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrition-BonziBuddy</title>
+  <link rel="stylesheet" href="../static/formulaire_style.css">
+  <script src="../static/inscription.js"></script>
+
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="../static/img/BonziBuddy.png" alt="Icône inscrutable" class="icone">
+      <h2 class="sous-title">Formulaire d'inscription</h2>
+    </header>
+      <p class="main-text">
+        Accède dès maintenant à "BonziBuddy" en remplissant ce formulaire, et tu pourras utiliser sa nouvelle version en ligne !
+      </p>
+    <form id="form" action="{{ url_for('bonziworld') }}" method="post">
+      <label for="nom">Nom</label>
+      <input type="text" name="nom" id="nom" required />
+      <br>
+  
+      <label for="prenom">Prénom</label>
+      <input type="text" name="prenom" id="prenom" required />
+      <br>
+  
+      <label for="age">Âge</label>
+      <input type="number" name="age" id="age" min="0" required />
+      <br>
+  
+      <label for="question">Votre sexe ?</label>
+      <select id="question" name="sexe" required>
+          <option value="" disabled selected>Choisissez une option</option>
+          <option value="Homme">Homme</option>
+          <option value="Femme">Femme</option>
+          <option value="Transgenre">Transgenre</option>
+          <option value="Non-Binaire">Non-Binaire</option>
+          <option value="Singe">Singe</option>
+      </select>
+      <br>
+      <h3 class="mini-title">Offrez votre plus beau sourire !</h3>
+      <video id="webcam" autoplay playsinline></video>
+      <br>
+      <button class="bonzi-button" id="capture-btn">Capture Photo</button>
+      <canvas id="canvas" style="display:none;"></canvas>
+      <img class="identiter" id="screenshot" alt="Capturer la Photo">
+      <input type="hidden" name="screenshot-data" id="screenshot-data">
+      <button class="bonzi-button" type="submit">Débloquer BonziBuddy</button>
+    </form>
+    <br>
+    <footer class="footer">
+      <img src="../static/img/Bonzi_footer.png" style="display: block; margin: auto;">
+    </footer>
+  </div>
+</body>
+</html>
+
+

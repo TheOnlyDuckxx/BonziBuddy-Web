@@ -13,18 +13,18 @@ let isProgressing = false;
 let progress = 0;
 let firstTime = true;
 let bonziMockingPhrases = [
-    { text: "Tu le fais exprès ou quoi ?", audio: "/static/mock1.wav" },
-    { text: "Encore perdu... Il faut juste sauter !", audio: "/static/mock2.wav" },
-    { text: "Tu veux peut-être un mode facile ?", audio: "/static/mock3.wav" },
-    { text: "Oups, ça doit être gênant !", audio: "/static/mock4.wav" },
-    { text: "Même un singe ferait mieux !", audio: "/static/mock5.wav" }
+    { text: "Tu le fais exprès ou quoi ?", audio: "/static/audio/mock1.wav" },
+    { text: "Encore perdu... Il faut juste sauter !", audio: "/static/audio/mock2.wav" },
+    { text: "Tu veux peut-être un mode facile ?", audio: "/static/audio/mock3.wav" },
+    { text: "Oups, ça doit être gênant !", audio: "/static/audio/mock4.wav" },
+    { text: "Même un singe ferait mieux !", audio: "/static/audio/mock5.wav" }
 ];
 
 
 //Interface principale
 
 window.addEventListener("keydown", function (e) {
-    if (e.code === "Space") {
+    if (e.code === "Space" ) {
         e.preventDefault();
     }
 
@@ -71,11 +71,17 @@ function openStartMenu() {
 
 
 function closeWindow(id) {
+    let glitchsound = document.getElementById("glitch-sound");
     let win = document.getElementById(id);
     let taskIcon = document.getElementById("task-" + id);
     
     if (win) win.style.display = "none";
     if (taskIcon) taskIcon.style.display = "none";
+
+    if (id === "app4") {
+        glitchsound.pause();
+        glitchsound.currentTime = 0;
+    }
 }
 
 function minimizeWindow(id) {
@@ -228,7 +234,7 @@ function updateMailIcon() {
 
     // 📌 Compte les emails qui ne sont pas lus
     let unreadEmails = emails.filter(email => !email.read).length;
-    mailIcon.src = unreadEmails > 0 ? "/static/mail_notif.ico" : "/static/mail.ico";
+    mailIcon.src = unreadEmails > 0 ? "/static/img/mail_notif.ico" : "/static/img/mail.ico";
 }
 
 
@@ -250,7 +256,7 @@ function notifyBonziNewMail() {
     bonzi.src = "/static/anim_bonzi/bonzi_msg.gif";
     dialogueBox.style.display = "block";
     dialogueText.textContent = "";
-    bonziAudio.src = "/static/msg.wav";
+    bonziAudio.src = "/static/audio/msg.wav";
     bonziAudio.play();
 
     bonziAudio.onloadedmetadata = function () {
@@ -290,9 +296,13 @@ function notifyBonziNewMail() {
 function Recherche() {
     let input = document.getElementById("Box").value.toLowerCase().trim();
     let browserContent = document.getElementById("window-content2");
-    let searchContainer = document.querySelector(".search-container");
-    let accueilText = document.getElementById("txt-accueil");
     let retourBtn = document.getElementById("btn-retour");
+
+    // Vérifier que les éléments existent avant d'agir
+    if (!browserContent || !retourBtn) {
+        console.error("Erreur : Un ou plusieurs éléments sont introuvables !");
+        return;
+    }
 
     // Liste des pages disponibles
     let pages = {
@@ -301,29 +311,46 @@ function Recherche() {
     };
 
     if (pages[input]) {
-        // Charger la page dans l'iframe
-        browserContent.innerHTML = `<iframe src="${pages[input]}" style="width: 100%; height: 100%; border: none;"></iframe>`;
+        // Remplacement complet de `window-content2`
+        browserContent.innerHTML = `
+            <iframe src="${pages[input]}" style="width: 100%; height: 100%; border: none;"></iframe>
+        `;
 
-        // Masquer l’interface du navigateur
-        //retourBtn.style.display = "block";  (ne marche pas)
-        searchContainer.style.display = "none";
-        accueilText.style.display = "none";
+        // Rendre le bouton retour visible
+        retourBtn = document.getElementById("btn-retour"); // Re-récupérer le bouton car il vient d'être recréé
+        retourBtn.style.display = "block";
     } else {
         alert("Page introuvable !");
     }
 }
 
 function retourAccueil() {
-    let browserContent = document.getElementById("browser-content");
-    let searchContainer = document.querySelector(".search-container");
-    let accueilText = document.getElementById("txt-accueil");
-    let retourBtn = document.getElementById("btn-retour");
+    let browserContent = document.getElementById("window-content2");
 
-    // Réafficher l'interface du navigateur
-    searchContainer.style.display = "block";
-    accueilText.style.display = "block";
-    retourBtn.style.display = "none"; // Cacher le bouton retour
+    if (!browserContent) {
+        console.error("Erreur : `window-content2` est introuvable !");
+        return;
+    }
+
+    // Restaurer l'accueil complet
+    browserContent.innerHTML = `
+        <img id="bonzinet_img" src="../static/img/tete_bonzi.png" alt="Bonzi" width="200" height="200">
+        <h1 id="txt-accueil">Bienvenue sur BonziNet !</h1>
+        <br>
+        <div class="search-container">
+            <input id="Box" type="text" placeholder="Entrez un mot-clé...">
+            <img id="loupe" src="../static/img/search.ico" onclick="Recherche()">
+        </div>
+        <br>
+        <h2 style="font-size: 10px;">Les recherches se font en minuscules</h2>
+        <button id="btn-retour" onclick="retourAccueil()" style="display: none;">⬅ Retour</button>
+    `;
+
+    // Re-récupérer `btn-retour` après réécriture de `innerHTML`
+    let retourBtn = document.getElementById("btn-retour");
+    retourBtn.style.display = "none"; // Le cacher à nouveau
 }
+
 
 
 // Bonzi Buddy
@@ -335,21 +362,29 @@ document.addEventListener("DOMContentLoaded", function () {
     let bonziAudio = document.getElementById("bonzi-audio");
 
     let dialogues = [
-        { text: "Bonjour ! Je suis BonziBuddy, ton nouvel assistant virtuel.", audio: "/static/audio1.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
-        { text: "Je suis à la pointe de la technologie et je peux faire plein de choses !", audio: "/static/audio2.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
-        { text: "J'ai conçu cet environnement spécialement pour toi, tu y trouveras plein d'activités amusantes !", audio: "/static/audio3.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { receiveEmail('firstMail', '????', 'P!ç^jieqé', 'Pourquoi est tu venu, tu n\'aurais jamais du faire revenir Bonzi !'); } },
-        { text: "Mais si tu veux que ce soit encore mieux, il faut que j'en sache un peu plus sur toi !", audio: "/static/audio4.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
-        { text: "Pour que je puisse m'adapter et ajouter de nouvelles fonctionnalités, il te suffit de répondre à quelques questions. ", audio: "/static/audio5.wav", animation: "/static/anim_bonzi/bonzi_idle.gif", action: function() { openWindow('app4'); } },
-        { text: "Super ! Maintenant que tu as répondu, je vais pouvoir me mettre à préparer une petite surprise rien que pour toi !", audio: "/static/audio6.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { receiveEmail('secondMail', '????', 'Bonzi', 'Stoppe immédiatement toute interaction avec Bonzi. Il est malveillant et peut causer des dégâts irréversibles. Si tu continues à communiquer avec lui, il sera trop tard pour éviter les conséquences. Prends ce message au sérieux. Ne tentes pas de contourner cette alerte.'); } },
-        { text: "Le temps que je termine, tu peux explorer l'environnement que j'ai créé pour toi !", audio: "/static/audio7.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { startProgressBar(); } },
-        { text: "Voilà, c'est prêt ! Tu veux découvrir ce que j'ai préparé ?", audio: "/static/audio8.wav", animation: "/static/anim_bonzi/bonzi_talk.gif",  },
-        { text: "Regarde, c'est très simple : il te suffit d'avancer en appuyant sur Z !", audio: "/static/audio9.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { openWindow('app5'); }},
-        { text: "Je... Je suis désolé, tu n'étais pas censé voir ça...", audio: "/static/audio10.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { receiveEmail('thirdMail', '????', 'Bonzi', 'Si tu veux comprendre ce qui se cache réellement derrière Bonzi, je te conseille de faire une recherche sur "Bonziblog" dans ton moteur de recherche. Tu y trouveras toutes les informations nécessaires pour comprendre la vérité sur cet assistant virtuel et les risques qu\'il représente. Ne prends pas ce conseil à la légère.'); } }
-    
+        { text: "Bonjour ! Je suis BonziBuddy, ton nouvel assistant virtuel.", audio: "/static/audio/audio1.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
+        { text: "Je suis à la pointe de la technologie et je peux faire plein de choses !", audio: "/static/audio/audio2.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
+        { text: "J'ai conçu cet environnement spécialement pour toi, tu y trouveras plein d'activités amusantes !", audio: "/static/audio/audio3.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { receiveEmail('firstMail', '????', 'P!ç^jieqé', 'Pourquoi es-tu venu, tu n\'aurais jamais du faire revenir Bonzi !'); } },
+        { text: "Mais si tu veux que ce soit encore mieux, il faut que j'en sache un peu plus sur toi !", audio: "/static/audio/audio4.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
+        { text: "Pour que je puisse m'adapter et ajouter de nouvelles fonctionnalités, il te suffit de répondre à quelques questions. ", audio: "/static/audio/audio5.wav", animation: "/static/anim_bonzi/bonzi_idle.gif", action: function() { openWindow('app4'); } },
+        { text: "Super ! Maintenant que tu as répondu, je vais pouvoir me mettre à préparer une petite surprise rien que pour toi !", audio: "/static/audio/audio6.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { receiveEmail('secondMail', '????', 'Bonzi', 'Stoppe immédiatement toute interaction avec Bonzi. Il est malveillant et peut causer des dégâts irréversibles. Si tu continues à communiquer avec lui, il sera trop tard pour éviter les conséquences. Prends ce message au sérieux. Ne tentes pas de contourner cette alerte.'); } },
+        { text: "Le temps que je termine, tu peux explorer l'environnement que j'ai créé pour toi !", audio: "/static/audio/audio7.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { startProgressBar(); } },
+        { text: "Voilà, c'est prêt ! Tu veux découvrir ce que j'ai préparé ?", audio: "/static/audio/audio8.wav", animation: "/static/anim_bonzi/bonzi_talk.gif",  },
+        { text: "Regarde, c'est très simple : il te suffit d'avancer en appuyant sur Z !", audio: "/static/audio/audio9.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { openWindow('app5'); }},
+        { text: "Je... Je suis désolé, tu n'étais pas censé voir ça...", audio: "/static/audio/audio10.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { receiveEmail('thirdMail', '????', 'Bonzi', 'Si tu veux comprendre ce qui se cache réellement derrière Bonzi, je te conseille de faire une recherche sur "Bonziblog" dans ton moteur de recherche. Tu y trouveras toutes les informations nécessaires pour comprendre la vérité sur cet assistant virtuel et les risques qu\'il représente. Ne prends pas ce conseil à la légère.'); } },
+        { text: "Je suis là pour toi, tout le temps. Vraiment tout le temps.", audio: "/static/audio/audio11.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
+        { text: "Tu sais... J\'aime apprendre des choses sur toi. C\'est fascinant.", audio: "/static/audio/audio12.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "Oh ! J\'ai oublié de te montrer ta carte d\'identité... J\'ai tout enregistré ! Comme ça on ne se cache plus rien", audio: "/static/audio/audio13.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { openWindow('app6'); } },
+        { text: "placeholder", audio: "/static/audio/audio14.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "placeholder", audio: "/static/audio/audio15.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "placeholder", audio: "/static/audio/audio16.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "placeholder", audio: "/static/audio/audio17.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "placeholder", audio: "/static/audio/audio18.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "placeholder", audio: "/static/audio/audio19.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
     ];
 
     let currentInterval = null;
-    let progress = 0;  
+    progress = 0;  
     let firstTime = true;  
     let audioFinished = false; 
 
@@ -367,17 +402,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function startBonziIntro() {
-        bonzi.src = "/static/anim_bonzi/bonzi_enter.gif";
-
+        
         setTimeout(() => {
-            bonzi.src = "/static/anim_bonzi/bonzi_hay.gif";  
+            bonzi.src = "/static/anim_bonzi/bonzi_enter.gif";
 
-            bonzi.onclick = () => {
-                if (!isBonziTalking) {
-                    playDialogue(progress);
-                }
-            };
-        }, 3000);
+            setTimeout(() => {
+                bonzi.src = "/static/anim_bonzi/bonzi_hay.gif";  
+
+                bonzi.onclick = () => {
+                    if (!isBonziTalking) {
+                        playDialogue(progress);
+                    }
+                };
+            }, 3000);
+        }, 5000);
     }
 
     function playDialogue(index) {
@@ -477,6 +515,56 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
+// Pour jouer des dialogues spécieux en dehors de la séquence principale
+function playSpeDialogue(texte, audio, anim) {
+
+    isBonziTalking = true;
+    audioFinished = false;
+
+    let bonzi = document.getElementById("bonzi");
+    let dialogueBox = document.getElementById("dialogue-box");
+    let dialogueText = document.getElementById("dialogue-text");
+    let bonziAudio = document.getElementById("bonzi-audio");
+
+    bonzi.src = anim;
+    dialogueBox.style.display = "block";
+    dialogueText.textContent = ""; // Efface le texte précédent
+    bonziAudio.src = audio;
+    bonziAudio.play();
+
+    bonziAudio.onloadedmetadata = function () {
+
+        let duration = bonziAudio.duration * 1000;
+        let speed = duration / texte.length;
+
+        let i = 0;
+        let interval = setInterval(() => {
+            if (i < texte.length) {
+                dialogueText.textContent += texte[i];
+                i++;
+            } else {
+                clearInterval(interval);
+            }
+        }, speed);
+    };
+
+    bonziAudio.onended = () => {
+        bonzi.src = "/static/anim_bonzi/bonzi_idle.gif";
+        audioFinished = true;
+        isBonziTalking = false;
+    };
+
+    function closeDialogueIfConditionsMet(event) {
+        if (audioFinished && event.target !== bonzi && event.target !== dialogueBox) {
+            dialogueBox.style.display = "none";
+            document.removeEventListener("click", closeDialogueIfConditionsMet);
+        }
+    }
+
+    document.addEventListener("click", closeDialogueIfConditionsMet);
+}
+
 function bonziMockPlayer() {
     if (isBonziTalking) return;
 
@@ -533,18 +621,20 @@ function bonziMockPlayer() {
 
 // Bonzi Test (un peu buggé)
 
+
 let bonziTestQuestions = [
     { 
         text: "Quel animal préfères-tu ?", 
         type: "image",
         options: [
-            { src: "/static/chien.jpg", value: "chien" },
-            { src: "/static/chat.jpg", value: "chat" },
-            { src: "/static/singe.jpg", value: "singe" }
+            { src: "/static/img/chien.jpg", value: "chien" },
+            { src: "/static/img/chat.jpg", value: "chat" },
+            { src: "/static/img/singe.jpg", value: "singe" }
         ]
     },
     { text: "Quelle est ta chose préférée dans la vie ?", type: "text" },
     { text: "Quelle taille fais-tu ?", type: "text" },
+    { text: "Quel est ton anniversaire ?", type: "select-date"},
     { text: "Si tu pouvais avoir un seul vœu, que serait-il ?", type: "text" },
     { text: "Qui est ton meilleur ami ?", type: "text", special1: true },
     { text: "Q̴̷̡̟͍̼̯̪̩̱͕͇̳̣̭͒̃ͩͬ̂̉ͫͬ͗͗́͒ͤͩ͢U̸̡̡̝͓̪͇̭͖̩̭͕͙͎̲͚͚̥̗̖͂̈͊̎̾ͩͮͭ͆̔̒ͮ̈̽̑͒ͤ͆ͧͧ͗̕͡ͅI̢͇̠͔͉͈͇ͨͫ̎͂͊͂̒̄ͪ͐ͮ̀_̵̨̞̻̰̫̖̰̬̙̝͍̗͚ͯ̓̿͆̃̐̈́̈́̈́ͫ͗ͬ̕ E̴̙ͮ̀͌ͨ̐͛ͯ͌S̶̵̸̨̡̢̺̬̰̜̬̺̳͙̟̺̜̳͑̋̏ͯͭ͂͒͆͌̽͘T̷̪̳̟͉͓̼̼͚͈̖̟̹̖͓͉̓̄̓̉́̀̍̈͐̏̊̇̂ͥ͡ T̟̈́_̴̢̼̮̖͇̲̗̫̭̦͎̳̖͎̖̭ͮ̊͑̔͊͛̍ͤ̓͑͛ͧͨͯ͂̌̅̅͑̕͝O̗̣͈ͦ͘_̨̨̻̟̲̬̱̫̊̂ͭ̀̀̇͋̏ͫͩ̕N̡̲͉̖̙̦̬͔̝̩̖̗͍̫̠̗ͮ͛̀̀͛̋̔͌̇̒̔ͩ̏̌͆̑́ͯ̏̓̀̕̕͢͟͝͞͠ M̡̛̪̻͎̗̝̫͓̪̳͚͑̽̌͐́͠_̷̷̸̝̻̝̩̫̪͓͍̱̯̙̹̤ͯͫ́͋̌ͧͧ̅̀͞E̜̠͐Í̷̢̡̳͍̰̝͔̙͙̯̬͍͈ͭ̂̆͌̆̓́ͩ̑̇ͩ̊̎́̎̈̾̌͡L̴̷͍̣̂̔̐̎_̵̵̨̮̯̫͍̦͖̝̰̺͇͉̠ͫ̄̀̔̎̇̾͂̆͂͒͐̐̐̚̕͘͜ͅL͎͕̦̿ͬ͗͛͘Ë̸͖̖͚̜̠̈́̎͋̆ͬ̚Ủ̡̘͚̔̂̍̕_̷̢̠̪̯̫̤̳̹́̎̇̆̾̂͢͠R̷̷̙͕̩͈̪̯͑̌̈́̎̔̑͂͑ͮ̋̐ͥ͘ A̞͕̙͚͖̮̞̠͙̺̋̊̎̋̏́̇̏́͜_M͉̮Ǐ̲̪̮͈̮̺̏̄̈́̄͛̑ͣͣ͝ ?̶̸̸̢̩̘͕͙͍͎̯̘͌ͣ̈́̔ͩ̏́̿̓͗ͫ̽̒̄ͧ̌̕͢͢͞_̧͔̕͜?̯̐̈́ͬ̌ͤ͂̎̇͡ͅͅ?̣͉̝͎̯̣̫ͯ̾̔̓", type: "text", special: true }
@@ -555,10 +645,9 @@ let currentQuestionIndex = 0;
 function startBonziTest() {
     let app4 = document.getElementById("app4");
     let windowContent = app4.querySelector(".window-content2");
-    windowContent.innerHTML = `
-        <h2 id="question-text"></h2>
-        <div id="question-options" class="test-options"></div>
-    `;
+    windowContent.innerHTML = '<h2 id="question-text"></h2><div id="question-options" class="test-options"></div>'
+
+    ;
 
     app4.style.display = "block";
     currentQuestionIndex = 0;
@@ -581,6 +670,43 @@ function showBonziTestQuestion() {
             img.onclick = () => nextBonziTestQuestion();
             questionOptions.appendChild(img);
         });
+
+    } else if (question.type === "select-date") {
+        let daySelect = document.createElement("select");
+        daySelect.id = "day-select";
+        for (let i = 1; i <= 31; i++) {
+            let option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            daySelect.appendChild(option);
+        }
+
+        let monthSelect = document.createElement("select");
+        monthSelect.id = "month-select";
+        for (let i = 1; i <= 12; i++) {
+            let option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            monthSelect.appendChild(option);
+        }
+
+        let validateButton = document.createElement("button");
+        validateButton.textContent = "Valider";
+        validateButton.style.outline = "1px solid #000000";
+        validateButton.style.background = "#C0C0C0";
+        validateButton.style.borderWidth = "2px";
+        validateButton.style.borderStyle = "solid";
+        validateButton.style.borderColor = "#FFFFFF #808080 #808080 #FFFFFF";
+        validateButton.onclick = () => {
+            let selectedDay = daySelect.value;
+            let selectedMonth = monthSelect.value;
+            let formattedDate = `${selectedDay}/${selectedMonth}`;
+            handleBonziTestAnswer(formattedDate);
+        };
+
+        questionOptions.appendChild(daySelect);
+        questionOptions.appendChild(monthSelect);
+        questionOptions.appendChild(validateButton);
     } else {
         let input = document.createElement("input");
         input.type = "text";
@@ -596,10 +722,20 @@ function showBonziTestQuestion() {
 function handleBonziTestAnswer(answer) {
     let question = bonziTestQuestions[currentQuestionIndex];
 
+    if (question.text === "Quelle taille fais-tu ?") {
+        sendBonziDataToServer("taille", answer);
+    }
+
+    if (question.text === "Quel est ton anniversaire ?") {
+        sendBonziDataToServer("anniversaire", answer);
+    }
+
     if (question.special1) {
-        if (answer.toLowerCase() == "bonzi" && answer.toLowerCase() == "bonzibuddy") {
-            bonziThanks();
+        if (answer.toLowerCase() == "bonzi" || answer.toLowerCase() == "bonzibuddy") {
+            playSpeDialogue('Oh ! Merci ! Tu sais... avant toi, j\'ai eu d\'autres amis. Mais ils sont tous partis. Je ne veux pas que tu partes.','../static/audio/thanks.wav','../static/anim_bonzi/bonzi_thanks.gif');
             closeWindow("app4");
+            bonziTestFinished = true;
+            reloadIdentityCard();
             return;
         }
 
@@ -610,20 +746,35 @@ function handleBonziTestAnswer(answer) {
         }
     }
     if (question.special) {
-        if (answer.toLowerCase() !== "bonzi" && answer.toLowerCase() !== "bonzibuddy") {
-            bonziType();
+        if (answer.toLowerCase() == "bonzi" || answer.toLowerCase() == "bonzibuddy") {
+            document.body.classList.remove("glitch-effect");
+            playSpeDialogue('Oh ! Merci ! Tu sais... avant toi, j\'ai eu d\'autres amis. Mais ils sont tous partis. Je ne veux pas que tu partes.','../static/audio/thanks.wav','../static/anim_bonzi/bonzi_thanks.gif');
+            closeWindow("app4");
+            bonziTestFinished = true;
+            reloadIdentityCard();
             return;
         }
 
         else {
-            body.classList.remove("glitch-effect"), 1500
-            closeWindow("app4");
-            bonziTestFinished = true;
+            bonziType();
             return;
         }
     }
 
+
     nextBonziTestQuestion();
+
+}
+
+function sendBonziDataToServer(field, value) {
+    fetch('/update-bonzi-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ field: field, value: value })
+    })
+    .then(response => response.json())
+    .then(data => console.log("✅ Donnée enregistrée :", data))
+    .catch(error => console.error("Erreur d'envoi de donnée :", error));
 }
 
 function nextBonziTestQuestion() {
@@ -631,6 +782,7 @@ function nextBonziTestQuestion() {
     if (currentQuestionIndex >= bonziTestQuestions.length) {
         closeWindow("app4");
         bonziTestFinished = true;
+        reloadIdentityCard();
         return;
     }
     showBonziTestQuestion();
@@ -638,7 +790,41 @@ function nextBonziTestQuestion() {
 
 function glitchBonziTest() {
     let body = document.body;
+    glitchAudio.play().catch(error => console.error("Erreur de lecture de l'audio :", error));
     body.classList.add("glitch-effect");
+}
+
+function bonziType() {
+    let inputField = document.querySelector("#question-options input");
+    inputField.value = "";
+    inputField.style.color = "red";
+    inputField.style.textTransform = "uppercase";
+    
+    let body = document.body;
+
+    setTimeout(() => {
+        inputField.placeholder = "BONZIBUDDY !";
+        let interval = setInterval(() => {
+            if (inputField.value.length < 10) {
+                inputField.value += "BONZIBUDDY"[inputField.value.length];
+            } else {
+                clearInterval(interval);
+                setTimeout(() => closeWindow("app4"), 1000);
+                setTimeout(() => body.classList.remove("glitch-effect"), 1500);
+            }
+        }, 100);
+        
+    }, 1000);
+
+    bonziTestFinished = true; 
+    
+}
+
+function glitchBonziTest() {
+    let body = document.body;
+    let glitchsound = document.getElementById("glitch-sound");
+    body.classList.add("glitch-effect");
+    glitchsound.play()
 }
 
 function bonziType() {
@@ -667,6 +853,14 @@ function bonziType() {
 }
 
 
+function reloadIdentityCard() {
+    let iframe = document.querySelector("#app6 iframe");
+    if (iframe) {
+        iframe.src = iframe.src; // Recharge l'iframe avec les nouvelles données
+    }
+}
+
+
 
 // Glitch de fond
 function backgroundGlitch() {
@@ -675,13 +869,17 @@ function backgroundGlitch() {
     let duration = 200;
 
     function changeBackground() {
+        let glitch2 = document.getElementById("glitch2");
+        glitch2.play()
+
         if (glitchIndex < maxLoops) {
-            document.body.style.backgroundImage = `url("/static/glitch${glitchIndex}.jpg")`;
+            document.body.style.backgroundImage = `url("/static/img/glitch${glitchIndex}.jpg")`;
             glitchIndex++;
             setTimeout(changeBackground, duration); // Attend 1 seconde avant de passer à l'image suivante
         }
         else {
-            document.body.style.backgroundImage = "url('/static/wallpaper.jpg')";
+            document.body.style.backgroundImage = "url('/static/img/wallpaper.jpg')";
+            glitch2.pause();
             duration += 200;
         }
     }
@@ -690,8 +888,8 @@ function backgroundGlitch() {
 }
 
 setInterval(() => {
-    if (bonziTestFinished && Math.random() < 0.01) {
-        backgroundGlitch();
+    if (progress>=5 && Math.random() < 0.02) {
+    backgroundGlitch();
     }
 }, 1000);
 
@@ -754,3 +952,33 @@ function startGame() {
     })
     .catch(error => console.error("Erreur lors de la réinitialisation du jeu :", error));
 }
+
+function startingScreen() {
+    let loadingScreen = document.getElementById("loading-screen");
+    
+    if (loadingScreen) {
+        loadingScreen.style.display = "flex"; // ✅ Affiche l'écran de chargement avant d'attendre
+
+        setTimeout(() => {
+            loadingScreen.style.opacity = "0"; // ✅ Transition douce
+            setTimeout(() => {
+                loadingScreen.style.display = "none";
+                loadingScreen.style.opacity = "1"; // Réinitialise l'opacité pour la prochaine fois
+            }, 500);
+        }, 5000); // Temps d'affichage
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", startingScreen()  );
+

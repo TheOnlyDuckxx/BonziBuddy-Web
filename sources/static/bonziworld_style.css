@@ -1,12 +1,32 @@
 body {
     margin: 0;
     overflow: hidden;
-    background: url('../static/wallpaper.jpg')  no-repeat center center fixed;
+    background: url('../static/img/wallpaper.jpg')  no-repeat center center fixed;
     background-size: cover;
     font-family: 'Press Start 2P', sans-serif;
     font-size: 10px;
     image-rendering: pixelated;
     text-transform: uppercase;
+}
+
+
+/* Ecran de chargement */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Assure que c'est au-dessus de tout */
+}
+
+#loading-image {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 
@@ -44,6 +64,17 @@ body {
 }
 
 .max-btn {
+    font-size:11px;
+    outline:1px solid #000000;
+    background:#C0C0C0;
+    border-width:2px;
+    border-style:solid;
+    border-color:#FFFFFF #808080 #808080 #FFFFFF;
+    position:relative;
+    bottom:0px;
+}
+
+#btn-retour {
     font-size:11px;
     outline:1px solid #000000;
     background:#C0C0C0;
@@ -260,6 +291,7 @@ body {
 .email-content {
     flex: 1;
     padding: 10px;
+    line-height: 1.5;
     overflow-y: auto;
     display: none;
     height: 100%;
@@ -411,13 +443,14 @@ canvas {
     left: 50%;
     transform: translateX(-50%);
     width: 250px;
-    background-color: white;
+    background-color: rgb(255, 228, 169);
     border: 2px solid black;
     padding: 10px;
     font-family: Arial, sans-serif;
     font-size: 14px;
     display: none;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
 }
 
 .test-options {
