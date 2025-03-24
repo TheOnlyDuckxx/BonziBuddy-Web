@@ -6,6 +6,9 @@
     <title>Bonzi World</title>
     <link rel="stylesheet" type="text/css" href="../static/bonziworld_style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        var admin = {{ 'true' if admin else 'false' }};
+    </script>
     <script src="../static/bonziworld_script.js" defer></script>
 </head>
 <body >
@@ -288,7 +291,7 @@
     {% if admin %}
     <div class="window" id="app7" style="display: none;">
         <div class="window-header" onmousedown="startDrag(event, 'app7')">
-            Terminal Administrateur
+            Terminal
             <div>
                 <button class="max-btn" onclick="toggleFullScreen('app7')">□</button>
                 <button class="reduce-btn" onclick="minimizeWindow('app7')">_</button>

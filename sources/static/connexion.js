@@ -9,12 +9,7 @@ function login() {
     
     // Identifiant et mot de passe prédéfinis
     const validUsername = "2004soft4.1joejay";
-
-
     const validPassword = "71515518"; 
-    // Le "désert sans fin" dont parle le créateur de BonziBuddy est en fait le jeu du dinosaure. 
-    // Après 1999 points, le message devient "GA=1ME 0VER", il s'agit d'une référence au code de l'Alphabet Numéroté
-    // GAME OVER donne alors 71515518 en code de l'Alphabet Numéroté, soit le mot de passe de cette page.
     
     if (username === validUsername && password === validPassword) {
         window.location.href = "BonzIw0rld" ; // Redirection après connexion réussie

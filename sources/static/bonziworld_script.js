@@ -5,12 +5,15 @@
 
 
 // Variables globales
+
 let bonziGameFinished = false;
 let bonziTestFinished = false;
+let cmdOpen = false;
 let isBonziTalking = false;
 let audioFinished = false;  
 let isProgressing = false;
 let progress = 0;
+let adminpassed = false;
 let firstTime = true;
 let bonziMockingPhrases = [
     { text: "Tu le fais exprès ou quoi ?", audio: "/static/audio/mock1.wav" },
@@ -40,6 +43,11 @@ function openWindow(id) {
     
     if (win) win.style.display = "block";
     if (taskIcon) taskIcon.style.display = "block";
+    if (id=="app7" && cmdOpen==false) {
+        playSpeDialogue("ARRETE TOUT DE SUITE ! IL N'Y A RIEN A VOIR ICI DE TOUTE FACON !","/static/audio/cmd.wav","/static/anim_bonzi/bonzi_talk.gif");
+        closeWindow('app7')
+        cmdOpen = true
+    }
 }
 
 function updateClock() {
@@ -145,14 +153,14 @@ function showMessage(sender, title, body, id) {
     document.getElementById('email-title').textContent = title;
     document.getElementById('email-body').textContent = body;
 
-    // 📩 Marquer l'email comme lu en session Flask
+    // Marquer l'email comme lu en session Flask
     fetch('/mark-email-read', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: id }) // ✅ Envoie l'ID à Flask
+        body: JSON.stringify({ id: id }) // Envoie l'ID à Flask
     })
     .then(() => {
-        loadEmails(); // ✅ Recharge les emails pour refléter le changement
+        loadEmails(); // Recharge les emails pour refléter le changement
     })
     .catch(error => console.error("Erreur lors de la mise à jour de l'email :", error));
 }
@@ -167,22 +175,22 @@ function showInbox() {
 
 document.addEventListener("DOMContentLoaded", function () {
     mailIcon = document.querySelector(".desktop-icon img[alt='Mail']");
-    loadEmails();  // ✅ Charge les emails depuis le serveur
+    loadEmails();  // Charge les emails depuis le serveur
 });
 
-// 📥 Charger les emails depuis Flask
+// Charger les emails depuis Flask
 function loadEmails() {
     fetch('/get-emails')
         .then(response => response.json())
         .then(data => {
-            emails = data; // 📌 Met à jour la liste des emails depuis Flask
+            emails = data; // Met à jour la liste des emails depuis Flask
             updateMailbox();
             updateMailIcon();
         })
         .catch(error => console.error("Erreur de récupération des emails :", error));
 }
 
-// 📩 Ajouter un email en session Flask
+// Ajouter un email en session Flask
 function receiveEmail(id, sender, subject, body) {
     let time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
@@ -201,9 +209,9 @@ function receiveEmail(id, sender, subject, body) {
         return response.json();
     })
     .then(() => {
-        console.log("📩 Nouveau mail reçu, vérification de Bonzi...");
-        loadEmails(); // ✅ Recharge les emails après ajout
-        notifyBonziNewMail(); // ✅ Tente de lancer l'animation de Bonzi
+        console.log("Nouveau mail reçu, vérification de Bonzi...");
+        loadEmails(); // Recharge les emails après ajout
+        notifyBonziNewMail(); // Tente de lancer l'animation de Bonzi
     })
     .catch(error => console.error("Erreur d'ajout d'email :", error));
 }
@@ -232,7 +240,7 @@ function updateMailbox() {
 function updateMailIcon() {
     if (!mailIcon) return;
 
-    // 📌 Compte les emails qui ne sont pas lus
+    // Compte les emails qui ne sont pas lus
     let unreadEmails = emails.filter(email => !email.read).length;
     mailIcon.src = unreadEmails > 0 ? "/static/img/mail_notif.ico" : "/static/img/mail.ico";
 }
@@ -272,12 +280,14 @@ function notifyBonziNewMail() {
                 clearInterval(interval);
             }
         }, speed);
+
+        audioFinished = true;
     };
 
     bonziAudio.onended = () => {
         bonzi.src = "/static/anim_bonzi/bonzi_idle.gif";
         isBonziTalking = false;
-        audioFinished = true;
+       
     };
 
     function closeDialogueIfConditionsMet(event) {
@@ -366,7 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { text: "Je suis à la pointe de la technologie et je peux faire plein de choses !", audio: "/static/audio/audio2.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
         { text: "J'ai conçu cet environnement spécialement pour toi, tu y trouveras plein d'activités amusantes !", audio: "/static/audio/audio3.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { receiveEmail('firstMail', '????', 'P!ç^jieqé', 'Pourquoi es-tu venu, tu n\'aurais jamais du faire revenir Bonzi !'); } },
         { text: "Mais si tu veux que ce soit encore mieux, il faut que j'en sache un peu plus sur toi !", audio: "/static/audio/audio4.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
-        { text: "Pour que je puisse m'adapter et ajouter de nouvelles fonctionnalités, il te suffit de répondre à quelques questions. ", audio: "/static/audio/audio5.wav", animation: "/static/anim_bonzi/bonzi_idle.gif", action: function() { openWindow('app4'); } },
+        { text: "Pour que je puisse m'adapter et ajouter de nouvelles fonctionnalités, il te suffit de répondre à quelques questions. ", audio: "/static/audio/audio5.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { openWindow('app4'); } },
         { text: "Super ! Maintenant que tu as répondu, je vais pouvoir me mettre à préparer une petite surprise rien que pour toi !", audio: "/static/audio/audio6.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { receiveEmail('secondMail', '????', 'Bonzi', 'Stoppe immédiatement toute interaction avec Bonzi. Il est malveillant et peut causer des dégâts irréversibles. Si tu continues à communiquer avec lui, il sera trop tard pour éviter les conséquences. Prends ce message au sérieux. Ne tentes pas de contourner cette alerte.'); } },
         { text: "Le temps que je termine, tu peux explorer l'environnement que j'ai créé pour toi !", audio: "/static/audio/audio7.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { startProgressBar(); } },
         { text: "Voilà, c'est prêt ! Tu veux découvrir ce que j'ai préparé ?", audio: "/static/audio/audio8.wav", animation: "/static/anim_bonzi/bonzi_talk.gif",  },
@@ -375,16 +385,16 @@ document.addEventListener("DOMContentLoaded", function () {
         { text: "Je suis là pour toi, tout le temps. Vraiment tout le temps.", audio: "/static/audio/audio11.wav", animation: "/static/anim_bonzi/bonzi_talk.gif" },
         { text: "Tu sais... J\'aime apprendre des choses sur toi. C\'est fascinant.", audio: "/static/audio/audio12.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
         { text: "Oh ! J\'ai oublié de te montrer ta carte d\'identité... J\'ai tout enregistré ! Comme ça on ne se cache plus rien", audio: "/static/audio/audio13.wav", animation: "/static/anim_bonzi/bonzi_talk.gif", action: function() { openWindow('app6'); } },
-        { text: "placeholder", audio: "/static/audio/audio14.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
-        { text: "placeholder", audio: "/static/audio/audio15.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
-        { text: "placeholder", audio: "/static/audio/audio16.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
-        { text: "placeholder", audio: "/static/audio/audio17.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
-        { text: "placeholder", audio: "/static/audio/audio18.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
-        { text: "placeholder", audio: "/static/audio/audio19.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "Je suis un peu fatigué ; je vais me reposer un peu...", audio: "/static/audio/audio14.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "Tu n'es pas censé être ici !!! Comment es-tu arrivé là ?!", audio: "/static/audio/audio15.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        { text: "C'est surement un bug... N'y fais pas attention et surtout ne touche à rien ; ça pourrait être dangereux !", audio: "/static/audio/audio16.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        // { text: "placeholder", audio: "/static/audio/audio17.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        // { text: "placeholder", audio: "/static/audio/audio18.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
+        // { text: "placeholder", audio: "/static/audio/audio19.wav", animation: "/static/anim_bonzi/bonzi_talk.gif"},
     ];
 
     let currentInterval = null;
-    progress = 0;  
+    progress = 14;  
     let firstTime = true;  
     let audioFinished = false; 
 
@@ -396,9 +406,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (firstTime) {
             startBonziIntro();
-        } else {
+        } 
+        if (admin && !adminpassed) {
+            bonzi.src = "/static/anim_bonzi/bonzi_shocked.gif";
+            adminpassed = true
+        } 
+        else {
             bonzi.src = "/static/anim_bonzi/bonzi_idle.gif";
         }
+
+
     });
 
     function startBonziIntro() {
@@ -440,6 +457,12 @@ document.addEventListener("DOMContentLoaded", function () {
             playDialogue(8);
             return;
         }
+
+        if (index == 14 && !admin ){
+            progress = 13;
+            playDialogue(14);
+            return
+        }
     
         let dialogue = dialogues[index];
     
@@ -471,6 +494,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
         bonziAudio.onended = () => {
             if (index==6){bonzi.src = "/static/anim_bonzi/bonzi_note.gif";} 
+            if (index==13){bonzi.src = "/static/anim_bonzi/bonzi_sleep.gif"}
             else {bonzi.src = "/static/anim_bonzi/bonzi_idle.gif";}
     
             if (dialogue.action) {
@@ -773,7 +797,7 @@ function sendBonziDataToServer(field, value) {
         body: JSON.stringify({ field: field, value: value })
     })
     .then(response => response.json())
-    .then(data => console.log("✅ Donnée enregistrée :", data))
+    .then(data => console.log("Donnée enregistrée :", data))
     .catch(error => console.error("Erreur d'envoi de donnée :", error));
 }
 
@@ -856,7 +880,7 @@ function bonziType() {
 function reloadIdentityCard() {
     let iframe = document.querySelector("#app6 iframe");
     if (iframe) {
-        iframe.src = iframe.src; // Recharge l'iframe avec les nouvelles données
+        iframe.src = "/idendite"; // Recharge l'iframe avec les nouvelles données
     }
 }
 
@@ -928,7 +952,7 @@ function startGame() {
     let wContent = document.getElementById("window-content3");
     toggleFullScreen("app5");
 
-    // ✅ Réinitialise l'état du jeu avant de l'ouvrir
+    // Réinitialise l'état du jeu avant de l'ouvrir
     fetch('/reset-bonzi-game', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
@@ -957,10 +981,10 @@ function startingScreen() {
     let loadingScreen = document.getElementById("loading-screen");
     
     if (loadingScreen) {
-        loadingScreen.style.display = "flex"; // ✅ Affiche l'écran de chargement avant d'attendre
+        loadingScreen.style.display = "flex"; //Affiche l'écran de chargement avant d'attendre
 
         setTimeout(() => {
-            loadingScreen.style.opacity = "0"; // ✅ Transition douce
+            loadingScreen.style.opacity = "0"; //Transition douce
             setTimeout(() => {
                 loadingScreen.style.display = "none";
                 loadingScreen.style.opacity = "1"; // Réinitialise l'opacité pour la prochaine fois
@@ -970,15 +994,5 @@ function startingScreen() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-document.addEventListener("DOMContentLoaded", startingScreen()  );
+document.addEventListener("DOMContentLoaded", () => startingScreen()  );
 

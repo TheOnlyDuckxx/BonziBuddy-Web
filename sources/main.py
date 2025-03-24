@@ -6,11 +6,12 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 5*1024*1024
 app.secret_key = os.urandom(24) 
 
+# Définition des variables
 nom='Bonzi'
 prenom='Buddy'
 age='99'
 sexe='Singe'
-screenshot = 'N'
+screenshot = '/static/img/bonzi.jpg'
 taille = "Inconnue"
 anniversaire = "??"
 bonzi_game_finished = False

@@ -1,3 +1,11 @@
+window.onload = function () {
+    const canvas = document.getElementById("gameCanvas");
+    canvas.focus();
+    canvas.addEventListener("click", () => {
+        canvas.focus();
+    });
+};
+
 // Initialisation de la scène Three.js
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -70,25 +78,33 @@ setInterval(() => {
 
 // Musique d'ambiance (joue uniquement si la touche Z est enfoncée)
 const ambientSound = new Audio('../static/audio/ambience.mp3');
+ambientSound.preload = "auto";
 ambientSound.loop = true;
 let isMusicPlaying = false;
+
+// Son du jump scare
+const jumpScareSound = new Audio('../static/audio/jumpscare.mp3');
+
+function startAmbientSound() {
+    ambientSound.play()
+    isMusicPlaying = true;  
+}
+
 
 // Gestion des touches
 let keys = {};
 window.addEventListener("keydown", (e) => {
-    keys[e.code] = true;
-    if (e.code === "KeyZ" && !isMusicPlaying) {
-        ambientSound.play();
-        isMusicPlaying = true;
+    if (!isMusicPlaying) {
+        startAmbientSound();
     }
+    keys[e.code] = true;
 });
 
 window.addEventListener("keyup", (e) => {
     keys[e.code] = false;
 });
 
-// Son du jump scare
-const jumpScareSound = new Audio('../static/img/jumpscare.mp3');
+
 
 // Fonction pour afficher le jump scare
 let isJumpScareActive = false;
@@ -98,6 +114,7 @@ function triggerJumpScare() {
         isJumpScareActive = true;
         document.getElementById('jumpscareImage').style.display = 'block';
         jumpScareSound.play();
+        ambientSound.pause()
         
         setTimeout(() => {
             document.getElementById('jumpscareImage').style.display = 'none';
