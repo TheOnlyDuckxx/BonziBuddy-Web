@@ -317,7 +317,10 @@ function Recherche() {
     // Liste des pages disponibles
     let pages = {
         "bonziblog": "bonziblog",
-        "bonzibuddy": "wiki"
+        "Bonziblog": "bonziblog",
+        "bonzibuddy": "wiki",
+        "bonzi": "wiki"
+        "Bonzi": "wiki"
     };
 
     if (pages[input]) {
